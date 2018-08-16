@@ -329,13 +329,17 @@ public class LexicalAnalyzer {
     /* user code: */
     private ArrayList<Token> tokens;
 
-    private void adicionarToken(String classificacao, String lexema) {
-        this.tokens.add(new Token(classificacao, lexema));
+    private void adicionarToken(String classificacao, String lexema, int linha, int coluna) {
+        this.tokens.add(new Token(classificacao, lexema, linha, coluna));
     }
 
     public LexicalAnalyzer(java.io.Reader in) {
         this.tokens = new ArrayList();
         this.zzReader = in;
+    }
+
+    public ArrayList getTokens() {
+        return this.tokens;
     }
 
     /**
@@ -698,7 +702,7 @@ public class LexicalAnalyzer {
             } else {
                 switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
                     case 1: {
-                        adicionarToken("ERRO", yytext());
+                        adicionarToken("ERRO", yytext(), 0, 0);
                     }
                     case 17:
                         break;
@@ -707,72 +711,72 @@ public class LexicalAnalyzer {
                     case 18:
                         break;
                     case 3: {
-                        adicionarToken("NUM_INT", yytext());
+                        adicionarToken("NUM_INT", yytext(), yyline, yycolumn);
                     }
                     case 19:
                         break;
                     case 4: {
-                        adicionarToken("OPSOMA", yytext());
+                        adicionarToken("OPSOMA", yytext(), yyline, yycolumn);
                     }
                     case 20:
                         break;
                     case 5: {
-                        adicionarToken("OPSUB", yytext());
+                        adicionarToken("OPSUB", yytext(), yyline, yycolumn);
                     }
                     case 21:
                         break;
                     case 6: {
-                        adicionarToken("OPMUL", yytext());
+                        adicionarToken("OPMUL", yytext(), yyline, yycolumn);
                     }
                     case 22:
                         break;
                     case 7: {
-                        adicionarToken("OPDIV", yytext());
+                        adicionarToken("OPDIV", yytext(), yyline, yycolumn);
                     }
                     case 23:
                         break;
                     case 8: {
-                        adicionarToken("AP", yytext());
+                        adicionarToken("AP", yytext(), yyline, yycolumn);
                     }
                     case 24:
                         break;
                     case 9: {
-                        adicionarToken("FP", yytext());
+                        adicionarToken("FP", yytext(), yyline, yycolumn);
                     }
                     case 25:
                         break;
                     case 10: {
-                        adicionarToken("OP_MENOR", yytext());
+                        adicionarToken("OP_MENOR", yytext(), yyline, yycolumn);
                     }
                     case 26:
                         break;
                     case 11: {
-                        adicionarToken("OP_MAIOR", yytext());
+                        adicionarToken("OP_MAIOR", yytext(), yyline, yycolumn);
                     }
                     case 27:
                         break;
                     case 12: {
-                        adicionarToken("IDENTIFICADOR", yytext());
+                        adicionarToken("IDENTIFICADOR", yytext(), yyline, yycolumn);
                     }
                     case 28:
                         break;
                     case 13: {
-                        adicionarToken("PALAVRA_RESERVADA", yytext());
+                        adicionarToken("PALAVRA_RESERVADA", yytext(), yyline, yycolumn);
                     }
                     case 29:
                         break;
                     case 14: {
-                        adicionarToken("OP_MENOR_IGUAL", yytext());
+                        adicionarToken("OP_MENOR_IGUAL", yytext(), yyline, yycolumn);
                     }
                     case 30:
                         break;
                     case 15: {
-                        adicionarToken("OP_MAIOR_IGUAL", yytext());
+                        adicionarToken("OP_MAIOR_IGUAL", yytext(), yyline, yycolumn);
                     }
                     case 31:
                         break;
                     case 16: {
-                        adicionarToken("NUM_REAL", yytext());
+                        adicionarToken("NUM_REAL", yytext(), yyline, yycolumn);
                     }
                     case 32:
                         break;
@@ -781,11 +785,6 @@ public class LexicalAnalyzer {
                 }
             }
         }
-    }
-    
-    
-    public ArrayList getTokens(){
-        return this.tokens;
     }
 
 }

@@ -68,14 +68,14 @@ public class IPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Lexema", "Classificação"
+                "Lexema", "Classificação", "Linha", "Coluna"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -88,6 +88,11 @@ public class IPrincipal extends javax.swing.JFrame {
         });
         TabelaTokens.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(TabelaTokens);
+        if (TabelaTokens.getColumnModel().getColumnCount() > 0) {
+            TabelaTokens.getColumnModel().getColumn(0).setResizable(false);
+            TabelaTokens.getColumnModel().getColumn(1).setResizable(false);
+            TabelaTokens.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jMenu1.setText("Arquivo");
 
@@ -186,6 +191,8 @@ public class IPrincipal extends javax.swing.JFrame {
         for (int i = 0; i < tokens.size(); i++) {
             tabela.setValueAt(tokens.get(i).getLexema(), i, 0);
             tabela.setValueAt(tokens.get(i).getClassificacao(), i, 1);
+            tabela.setValueAt(tokens.get(i).getLinha(), i, 2);
+            tabela.setValueAt(tokens.get(i).getColuna(), i, 3);
         }
         
         for (int i = 0; i < tabela.getColumnCount(); i++) {

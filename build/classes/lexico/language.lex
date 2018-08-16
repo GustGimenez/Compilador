@@ -7,7 +7,7 @@ import java.util.ArrayList;
 %{
 private ArrayList<Token> tokens;
 
-private void adicionarToken(String classificacao, String lexema) {
+private void adicionarToken(String classificacao, String lexema, int line, int coluna) {
     this.tokens.add(new Token(classificacao, lexema));
 }
 
@@ -54,19 +54,19 @@ IDENTIFICADOR = ({LETRA}|{UL}{LETRA})({LETRA}|{DIGITO})*
 {BRANCO}            {}
 {LETRA}             {}
 {UL}                {}
-{NUM_INT}           { adicionarToken("NUM_INT", yytext()); }
-{NUM_REAL}          { adicionarToken("NUM_REAL", yytext()); }
-{OPSOMA}            { adicionarToken("OPSOMA", yytext()); }
-{OPSUB}             { adicionarToken("OPSUB", yytext()); }
-{OPMUL}             { adicionarToken("OPMUL", yytext()); }
-{OPDIV}             { adicionarToken("OPDIV", yytext()); }
-{AP}                { adicionarToken("AP", yytext()); }
-{FP}                { adicionarToken("FP", yytext()); }
-{PALAVRA_RESERVADA} { adicionarToken("PALAVRA_RESERVADA", yytext()); }
-{OP_MENOR}          { adicionarToken("OP_MENOR", yytext()); }
-{OP_MAIOR}          { adicionarToken("OP_MAIOR", yytext()); }
-{OP_MENOR_IGUAL}    { adicionarToken("OP_MENOR_IGUAL", yytext()); }
-{OP_MAIOR_IGUAL}    { adicionarToken("OP_MAIOR_IGUAL", yytext()); }
-{IDENTIFICADOR}     { adicionarToken("IDENTIFICADOR", yytext()); }
+{NUM_INT}           { adicionarToken("NUM_INT", yytext(), yyline, yycolumn); }
+{NUM_REAL}          { adicionarToken("NUM_REAL", yytext(), yyline, yycolumn); }
+{OPSOMA}            { adicionarToken("OPSOMA", yytext(), yyline, yycolumn); }
+{OPSUB}             { adicionarToken("OPSUB", yytext(), yyline, yycolumn); }
+{OPMUL}             { adicionarToken("OPMUL", yytext(), yyline, yycolumn); }
+{OPDIV}             { adicionarToken("OPDIV", yytext(), yyline, yycolumn); }
+{AP}                { adicionarToken("AP", yytext(), yyline, yycolumn); }
+{FP}                { adicionarToken("FP", yytext(), yyline, yycolumn); }
+{PALAVRA_RESERVADA} { adicionarToken("PALAVRA_RESERVADA", yytext(), yyline, yycolumn); }
+{OP_MENOR}          { adicionarToken("OP_MENOR", yytext(), yyline, yycolumn); }
+{OP_MAIOR}          { adicionarToken("OP_MAIOR", yytext(), yyline, yycolumn); }
+{OP_MENOR_IGUAL}    { adicionarToken("OP_MENOR_IGUAL", yytext(), yyline, yycolumn); }
+{OP_MAIOR_IGUAL}    { adicionarToken("OP_MAIOR_IGUAL", yytext(), yyline, yycolumn); }
+{IDENTIFICADOR}     { adicionarToken("IDENTIFICADOR", yytext(), yyline, yycolumn); }
 
 . { adicionarToken("ERRO", yytext()); }

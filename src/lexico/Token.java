@@ -10,17 +10,24 @@ package lexico;
  * @author Gustavo
  */
 public class Token {
+
     private String lexema;
     private String classificacao;
-//    private int linha;
-//    private int coluna;
-    
-    public Token(String classificacao,String lexema){
+    private int linha;
+    private int coluna;
+
+    public Token(String classificacao, String lexema, int linha, int coluna) {
         this.lexema = lexema;
         this.classificacao = classificacao;
+        this.linha = linha;
+        this.coluna = coluna;
+        System.out.println("-------------------------------");
+        System.out.println(lexema);
+        System.out.println("Linha: " + linha);
+        System.out.println("Coluna: " + coluna);
     }
-    
-    public void imprimeAttrs(){
+
+    public void imprimeAttrs() {
         System.out.println(this.lexema + "\t" + this.classificacao);
     }
 
@@ -39,6 +46,14 @@ public class Token {
     public void setClassificacao(String classificacao) {
         this.classificacao = classificacao;
     }
-    
+
+    public int getLinha() {
+        return linha;
+    }
+
+    public int getColuna() {
+        return coluna;
+    }
+
     
 }
