@@ -271,7 +271,7 @@ public class LexicalAnalyzer {
     private ArrayList<Token> tokens;
 
     private void adicionarToken(String descricao, String lexema) {
-        this.tokens.add(new Token(lexema, descricao));
+        this.tokens.add(new Token(descricao, lexema));
     }
 
     public LexicalAnalyzer(java.io.Reader in) {

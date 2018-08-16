@@ -12,6 +12,8 @@ package lexico;
 public class Token {
     private String lexema;
     private String classificacao;
+//    private int linha;
+//    private int coluna;
     
     public Token(String classificacao,String lexema){
         this.lexema = lexema;

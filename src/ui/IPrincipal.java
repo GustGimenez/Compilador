@@ -6,21 +6,30 @@
 package ui;
 
 import arquivos.GerenciadorArquivos;
+import java.awt.Color;
+import java.awt.Component;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import lexico.Token;
 import lexico.LexicalAnalyzer;
+
 /**
  *
  * @author Gustavo
  */
 public class IPrincipal extends javax.swing.JFrame {
+
     private LexicalAnalyzer lexico;
     private GerenciadorArquivos arqs;
+    private TableCellRenderer colorir;
 
     /**
      * Creates new form IPrincipal
@@ -77,6 +86,7 @@ public class IPrincipal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TabelaTokens.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(TabelaTokens);
 
         jMenu1.setText("Arquivo");
@@ -147,10 +157,10 @@ public class IPrincipal extends javax.swing.JFrame {
         try {
             this.lexico.yylex();
             tokens = this.lexico.getTokens();
+            this.populaTabelaTokens(tokens);
         } catch (IOException ex) {
             Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.populaTabelaTokens(tokens);
     }//GEN-LAST:event_AnalisarLexicoActionPerformed
 
     private void AbrirArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirArquivoActionPerformed
@@ -158,7 +168,7 @@ public class IPrincipal extends javax.swing.JFrame {
         String texto = this.arqs.abrirArquivo().toString();
         texto = texto.replace("[", "");
         texto = texto.replace("]", "");
-        
+
         // Colocando o texto no editor
         this.EditorTexto.setText(texto);
     }//GEN-LAST:event_AbrirArquivoActionPerformed
@@ -167,15 +177,23 @@ public class IPrincipal extends javax.swing.JFrame {
         this.arqs.salvarArquivo(this.EditorTexto.getText());
     }//GEN-LAST:event_SalvarArquivoActionPerformed
 
-    private void populaTabelaTokens(ArrayList<Token> tokens){
+    private void populaTabelaTokens(ArrayList<Token> tokens) {
+        this.colorir = new Colorir(tokens);
+        TableColumn coluna;
         DefaultTableModel tabela = (DefaultTableModel) this.TabelaTokens.getModel();
         
         tabela.setNumRows(tokens.size());
-        for(int i = 0; i < tokens.size(); i++){
+        for (int i = 0; i < tokens.size(); i++) {
             tabela.setValueAt(tokens.get(i).getLexema(), i, 0);
             tabela.setValueAt(tokens.get(i).getClassificacao(), i, 1);
         }
+        
+        for (int i = 0; i < tabela.getColumnCount(); i++) {
+            coluna = this.TabelaTokens.getColumnModel().getColumn(i);
+            coluna.setCellRenderer(colorir);
+        }
     }
+
     /**
      * @param args the command line arguments
      */
@@ -209,6 +227,33 @@ public class IPrincipal extends javax.swing.JFrame {
                 new IPrincipal().setVisible(true);
             }
         });
+    }
+
+    private class Colorir extends DefaultTableCellRenderer {
+        
+        ArrayList<Token> tokens;
+        
+        public Colorir(ArrayList<Token> tokens) {
+            this.tokens = tokens;
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table,
+                Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            
+            super.getTableCellRendererComponent(table, value, isSelected, 
+                    hasFocus, row, column);
+            
+            if (this.tokens.get(row).getClassificacao().equals("ERRO")) {
+                setBackground(Color.RED);
+            } else {
+                setBackground(table.getBackground());
+            }
+            return this;
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
