@@ -3,21 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Interface;
+package ui;
 
 import arquivos.GerenciadorArquivos;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import lexico.AnalisadorLexico;
 import lexico.Token;
+import lexico.LexicalAnalyzer;
 /**
  *
  * @author Gustavo
  */
 public class IPrincipal extends javax.swing.JFrame {
-    private AnalisadorLexico lexico;
+    private LexicalAnalyzer lexico;
     private GerenciadorArquivos arqs;
 
     /**
@@ -141,13 +143,14 @@ public class IPrincipal extends javax.swing.JFrame {
     private void AnalisarLexicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalisarLexicoActionPerformed
         String entrada = this.EditorTexto.getText();
         ArrayList<Token> tokens = new ArrayList();
-        this.lexico = new AnalisadorLexico(new StringReader(entrada));
-        try{
-            this.lexico.yylex(tokens);
-            this.populaTabelaTokens(tokens);
-        }catch(IOException e){
-            
+        this.lexico = new LexicalAnalyzer(new StringReader(entrada));
+        try {
+            this.lexico.yylex();
+            tokens = this.lexico.getTokens();
+        } catch (IOException ex) {
+            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.populaTabelaTokens(tokens);
     }//GEN-LAST:event_AnalisarLexicoActionPerformed
 
     private void AbrirArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirArquivoActionPerformed

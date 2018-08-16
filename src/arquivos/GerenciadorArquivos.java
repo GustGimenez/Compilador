@@ -28,11 +28,11 @@ public class GerenciadorArquivos {
      *
      * @return ArrayList de String
      */
-    public ArrayList<String> abrirArquivo() {
+    public String abrirArquivo() {
         // Variáveis para abertura da janela de seleção de arquivos
         JFileChooser fc = new JFileChooser("C:\\");
         int result = fc.showOpenDialog(fc);
-        ArrayList<String> texto = null;
+        StringBuilder texto = null;
 
         if (result == JFileChooser.APPROVE_OPTION) {
             // Caso dê certo
@@ -45,12 +45,12 @@ public class GerenciadorArquivos {
 
                 // Variáveis para auxiliar a leitura do arquivo
                 String linha;
-                texto = new ArrayList();
+                texto = new StringBuilder();
 
                 // Loop para a leitura do arquivo
                 linha = in.readLine();
                 while (linha != null) {
-                    texto.add(linha);
+                    texto.append(linha);
                     linha = in.readLine();
                 }
 
@@ -64,7 +64,7 @@ public class GerenciadorArquivos {
                 }
             }
         }
-        return texto;
+        return texto.toString();
     }
 
     /**
@@ -93,7 +93,7 @@ public class GerenciadorArquivos {
                     
                     // Escrevendo cada linha no arquivo
                     for (int i = 0; i < linhas.length; i++) {
-                        arquivo.write(linhas[i]);
+                        arquivo.write(linhas[i] + "\n");
                     }
                     // Fechando o arquivo e retorno TRUE
                     arquivo.close();
