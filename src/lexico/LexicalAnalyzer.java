@@ -39,9 +39,12 @@ public class LexicalAnalyzer {
      * Translates characters to character classes
      */
     private static final String ZZ_CMAP_PACKED
-            = "\11\0\1\3\1\3\1\12\1\12\1\3\22\0\1\3\7\0\1\10"
-            + "\1\11\1\6\1\4\1\0\1\5\1\1\1\7\1\2\11\2\102\0"
-            + "\1\3\10\0\1\12\u1fa2\0\1\12\1\12\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+            = "\11\0\1\5\1\5\1\43\1\43\1\5\22\0\1\5\7\0\1\12"
+            + "\1\13\1\10\1\6\1\0\1\7\1\3\1\11\1\4\11\4\2\0"
+            + "\1\40\1\42\1\41\2\0\32\1\4\0\1\2\1\0\1\31\1\32"
+            + "\1\37\1\24\1\20\1\15\1\33\1\17\1\14\2\1\1\22\1\36"
+            + "\1\21\1\25\1\35\1\1\1\27\1\23\1\16\1\34\1\30\1\26"
+            + "\3\1\1\0\1\5\10\0\1\43\u1fa2\0\1\43\1\43\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
     /**
      * Translates characters to character classes
@@ -54,11 +57,12 @@ public class LexicalAnalyzer {
     private static final int[] ZZ_ACTION = zzUnpackAction();
 
     private static final String ZZ_ACTION_PACKED_0
-            = "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"
-            + "\1\10\1\11\1\0\1\12";
+            = "\1\0\1\1\3\2\1\3\1\4\1\5\1\6\1\7"
+            + "\1\10\1\11\14\2\1\12\1\13\1\14\1\0\1\15"
+            + "\16\14\1\16\1\17\1\20\20\14";
 
     private static int[] zzUnpackAction() {
-        int[] result = new int[12];
+        int[] result = new int[62];
         int offset = 0;
         offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
         return result;
@@ -86,11 +90,17 @@ public class LexicalAnalyzer {
     private static final int[] ZZ_ROWMAP = zzUnpackRowMap();
 
     private static final String ZZ_ROWMAP_PACKED_0
-            = "\0\0\0\13\0\13\0\26\0\13\0\13\0\13\0\13"
-            + "\0\13\0\13\0\41\0\41";
+            = "\0\0\0\44\0\110\0\154\0\44\0\220\0\44\0\44"
+            + "\0\44\0\44\0\44\0\44\0\264\0\330\0\374\0\u0120"
+            + "\0\u0144\0\u0168\0\u018c\0\u01b0\0\u01d4\0\u01f8\0\u021c\0\u0240"
+            + "\0\u0264\0\u0288\0\110\0\u02ac\0\110\0\u02d0\0\u02f4\0\u0318"
+            + "\0\u033c\0\u0360\0\u0384\0\u03a8\0\u03cc\0\u03f0\0\u0414\0\u0438"
+            + "\0\u045c\0\u0480\0\u04a4\0\44\0\44\0\u02ac\0\u04c8\0\u04ec"
+            + "\0\u0510\0\u0534\0\u0558\0\u057c\0\u05a0\0\u05c4\0\u05e8\0\u060c"
+            + "\0\u0630\0\u0654\0\u0678\0\u069c\0\u06c0\0\u06e4";
 
     private static int[] zzUnpackRowMap() {
-        int[] result = new int[12];
+        int[] result = new int[62];
         int offset = 0;
         offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
         return result;
@@ -115,11 +125,59 @@ public class LexicalAnalyzer {
     private static final int[] ZZ_TRANS = zzUnpackTrans();
 
     private static final String ZZ_TRANS_PACKED_0
-            = "\1\2\1\3\1\4\1\3\1\5\1\6\1\7\1\10"
-            + "\1\11\1\12\15\0\1\13\1\4\12\0\1\14\10\0";
+            = "\1\2\1\3\1\4\1\5\1\6\1\5\1\7\1\10"
+            + "\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\3"
+            + "\1\20\1\21\2\3\1\22\1\3\1\23\1\24\1\25"
+            + "\1\26\1\27\2\3\1\30\2\3\1\31\1\32\1\2"
+            + "\46\0\1\33\2\0\1\33\7\0\24\33\5\0\1\33"
+            + "\12\0\24\33\7\0\1\34\1\6\40\0\1\33\2\0"
+            + "\1\33\7\0\1\33\1\35\3\33\1\36\16\33\5\0"
+            + "\1\33\2\0\1\33\7\0\11\33\1\37\3\33\1\40"
+            + "\6\33\5\0\1\33\2\0\1\33\7\0\3\33\1\41"
+            + "\7\33\1\42\10\33\5\0\1\33\2\0\1\33\7\0"
+            + "\5\33\1\43\1\44\15\33\5\0\1\33\2\0\1\33"
+            + "\7\0\11\33\1\36\12\33\5\0\1\33\2\0\1\33"
+            + "\7\0\1\45\10\33\1\35\12\33\5\0\1\33\2\0"
+            + "\1\33\7\0\3\33\1\46\7\33\1\47\10\33\5\0"
+            + "\1\33\2\0\1\33\7\0\4\33\1\50\17\33\5\0"
+            + "\1\33\2\0\1\33\7\0\15\33\1\37\6\33\5\0"
+            + "\1\33\2\0\1\33\7\0\5\33\1\43\16\33\5\0"
+            + "\1\33\2\0\1\33\7\0\4\33\1\51\4\33\1\52"
+            + "\12\33\5\0\1\33\2\0\1\33\7\0\13\33\1\53"
+            + "\10\33\46\0\1\54\43\0\1\55\5\0\1\56\40\0"
+            + "\1\33\2\0\1\33\7\0\2\33\1\35\21\33\5\0"
+            + "\1\33\2\0\1\33\7\0\13\33\1\35\10\33\5\0"
+            + "\1\33\2\0\1\33\7\0\6\33\1\44\15\33\5\0"
+            + "\1\33\2\0\1\33\7\0\4\33\1\57\17\33\5\0"
+            + "\1\33\2\0\1\33\7\0\20\33\1\60\3\33\5\0"
+            + "\1\33\2\0\1\33\7\0\10\33\1\35\13\33\5\0"
+            + "\1\33\2\0\1\33\7\0\7\33\1\60\14\33\5\0"
+            + "\1\33\2\0\1\33\7\0\14\33\1\35\7\33\5\0"
+            + "\1\33\2\0\1\33\7\0\1\61\23\33\5\0\1\33"
+            + "\2\0\1\33\7\0\1\62\23\33\5\0\1\33\2\0"
+            + "\1\33\7\0\15\33\1\43\6\33\5\0\1\33\2\0"
+            + "\1\33\7\0\17\33\1\63\4\33\5\0\1\33\2\0"
+            + "\1\33\7\0\11\33\1\64\12\33\5\0\1\33\2\0"
+            + "\1\33\7\0\11\33\1\65\12\33\5\0\1\33\2\0"
+            + "\1\33\7\0\5\33\1\35\16\33\5\0\1\33\2\0"
+            + "\1\33\7\0\4\33\1\35\17\33\5\0\1\33\2\0"
+            + "\1\33\7\0\6\33\1\60\15\33\5\0\1\33\2\0"
+            + "\1\33\7\0\2\33\1\60\21\33\5\0\1\33\2\0"
+            + "\1\33\7\0\1\57\23\33\5\0\1\33\2\0\1\33"
+            + "\7\0\6\33\1\66\15\33\5\0\1\33\2\0\1\33"
+            + "\7\0\17\33\1\67\3\33\1\70\5\0\1\33\2\0"
+            + "\1\33\7\0\4\33\1\71\17\33\5\0\1\33\2\0"
+            + "\1\33\7\0\13\33\1\72\10\33\5\0\1\33\2\0"
+            + "\1\33\7\0\4\33\1\73\17\33\5\0\1\33\2\0"
+            + "\1\33\7\0\15\33\1\57\6\33\5\0\1\33\2\0"
+            + "\1\33\7\0\15\33\1\74\6\33\5\0\1\33\2\0"
+            + "\1\33\7\0\10\33\1\75\13\33\5\0\1\33\2\0"
+            + "\1\33\7\0\22\33\1\35\1\33\5\0\1\33\2\0"
+            + "\1\33\7\0\20\33\1\76\3\33\5\0\1\33\2\0"
+            + "\1\33\7\0\13\33\1\60\10\33\4\0";
 
     private static int[] zzUnpackTrans() {
-        int[] result = new int[44];
+        int[] result = new int[1800];
         int offset = 0;
         offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
         return result;
@@ -161,10 +219,11 @@ public class LexicalAnalyzer {
     private static final int[] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
     private static final String ZZ_ATTRIBUTE_PACKED_0
-            = "\1\0\2\11\1\1\6\11\1\0\1\1";
+            = "\1\0\1\11\2\1\1\11\1\1\6\11\17\1\1\0"
+            + "\17\1\2\11\21\1";
 
     private static int[] zzUnpackAttribute() {
-        int[] result = new int[12];
+        int[] result = new int[62];
         int offset = 0;
         offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
         return result;
@@ -270,8 +329,8 @@ public class LexicalAnalyzer {
     /* user code: */
     private ArrayList<Token> tokens;
 
-    private void adicionarToken(String descricao, String lexema) {
-        this.tokens.add(new Token(descricao, lexema));
+    private void adicionarToken(String classificacao, String lexema) {
+        this.tokens.add(new Token(classificacao, lexema));
     }
 
     public LexicalAnalyzer(java.io.Reader in) {
@@ -291,7 +350,7 @@ public class LexicalAnalyzer {
         /* index in packed string  */
         int j = 0;
         /* index in unpacked array */
-        while (i < 86) {
+        while (i < 150) {
             int count = packed.charAt(i++);
             char value = packed.charAt(i++);
             do {
@@ -641,51 +700,81 @@ public class LexicalAnalyzer {
                     case 1: {
                         adicionarToken("ERRO", yytext());
                     }
-                    case 11:
+                    case 17:
                         break;
                     case 2: {
                     }
-                    case 12:
+                    case 18:
                         break;
                     case 3: {
                         adicionarToken("NUM_INT", yytext());
                     }
-                    case 13:
+                    case 19:
                         break;
                     case 4: {
                         adicionarToken("OPSOMA", yytext());
                     }
-                    case 14:
+                    case 20:
                         break;
                     case 5: {
                         adicionarToken("OPSUB", yytext());
                     }
-                    case 15:
+                    case 21:
                         break;
                     case 6: {
                         adicionarToken("OPMUL", yytext());
                     }
-                    case 16:
+                    case 22:
                         break;
                     case 7: {
                         adicionarToken("OPDIV", yytext());
                     }
-                    case 17:
+                    case 23:
                         break;
                     case 8: {
                         adicionarToken("AP", yytext());
                     }
-                    case 18:
+                    case 24:
                         break;
                     case 9: {
                         adicionarToken("FP", yytext());
                     }
-                    case 19:
+                    case 25:
                         break;
                     case 10: {
+                        adicionarToken("OP_MENOR", yytext());
+                    }
+                    case 26:
+                        break;
+                    case 11: {
+                        adicionarToken("OP_MAIOR", yytext());
+                    }
+                    case 27:
+                        break;
+                    case 12: {
+                        adicionarToken("IDENTIFICADOR", yytext());
+                    }
+                    case 28:
+                        break;
+                    case 13: {
+                        adicionarToken("PALAVRA_RESERVADA", yytext());
+                    }
+                    case 29:
+                        break;
+                    case 14: {
+                        adicionarToken("OP_MENOR_IGUAL", yytext());
+                    }
+                    case 30:
+                        break;
+                    case 15: {
+                        adicionarToken("OP_MAIOR_IGUAL", yytext());
+                    }
+                    case 31:
+                        break;
+                    case 16: {
                         adicionarToken("NUM_REAL", yytext());
                     }
-                    case 20:
+                    case 32:
                         break;
                     default:
                         zzScanError(ZZ_NO_MATCH);
@@ -693,12 +782,10 @@ public class LexicalAnalyzer {
             }
         }
     }
-
-    public ArrayList<Token> getTokens() {
-        return tokens;
+    
+    
+    public ArrayList getTokens(){
+        return this.tokens;
     }
-    
-    
-    
 
 }

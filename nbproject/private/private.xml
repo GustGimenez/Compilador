@@ -4,10 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/lexico/LexicalAnalyzer.java</file>
-            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/lexico/Gerador.java</file>
-            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/lexico/language.lex</file>
-            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/lexico/AnalisadorLexico.java</file>
-            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/Interface/IPrincipal.java</file>
+            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/arquivos/GerenciadorArquivos.java</file>
+            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/ui/IPrincipal.java</file>
+            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4_ano/2_semestre/Compiladores/Compilador/src/lexico/Token.java</file>
         </group>
     </open-files>
 </project-private>
