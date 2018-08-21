@@ -7,8 +7,8 @@ import java.util.ArrayList;
 %{
 private ArrayList<Token> tokens;
 
-private void adicionarToken(String classificacao, String lexema, int line, int coluna) {
-    this.tokens.add(new Token(classificacao, lexema));
+private void adicionarToken(String classificacao, String lexema, int linha, int coluna) {
+    this.tokens.add(new Token(classificacao, lexema, linha, coluna));
 }
 
 public LexicalAnalyzer(java.io.Reader in){
@@ -31,6 +31,8 @@ public ArrayList getTokens(){
 LETRA = [a-zA-Z]
 UL = "_"
 PONTO = [.]
+VIRGULA = [,]
+PONTO_VIRGULA = [;]
 DIGITO = [0-9]
 BRANCO = [\n| |\t|\r]
 NUM_INT = 0|{DIGITO}{DIGITO}*
@@ -46,14 +48,17 @@ OP_MENOR = "<"
 OP_MAIOR = ">" 
 OP_MENOR_IGUAL = "<=" 
 OP_MAIOR_IGUAL = ">="
+OP_ATRI = "="
+OP_IGUAL = "=="
+OP_DIF = "!="
 IDENTIFICADOR = ({LETRA}|{UL}{LETRA})({LETRA}|{DIGITO})*
 
 %%
 
 {PONTO}		    {}
+{VIRGULA}		    {}
+{PONTO_VIRGULA}     {}
 {BRANCO}            {}
-{LETRA}             {}
-{UL}                {}
 {NUM_INT}           { adicionarToken("NUM_INT", yytext(), yyline, yycolumn); }
 {NUM_REAL}          { adicionarToken("NUM_REAL", yytext(), yyline, yycolumn); }
 {OPSOMA}            { adicionarToken("OPSOMA", yytext(), yyline, yycolumn); }
@@ -67,6 +72,9 @@ IDENTIFICADOR = ({LETRA}|{UL}{LETRA})({LETRA}|{DIGITO})*
 {OP_MAIOR}          { adicionarToken("OP_MAIOR", yytext(), yyline, yycolumn); }
 {OP_MENOR_IGUAL}    { adicionarToken("OP_MENOR_IGUAL", yytext(), yyline, yycolumn); }
 {OP_MAIOR_IGUAL}    { adicionarToken("OP_MAIOR_IGUAL", yytext(), yyline, yycolumn); }
+{OP_ATRI}           { adicionarToken("OP_ATRI", yytext(), yyline, yycolumn); }
+{OP_IGUAL}          { adicionarToken("OP_IGUAL", yytext(), yyline, yycolumn); }
+{OP_DIF}            { adicionarToken("OP_DIF", yytext(), yyline, yycolumn); }
 {IDENTIFICADOR}     { adicionarToken("IDENTIFICADOR", yytext(), yyline, yycolumn); }
 
-. { adicionarToken("ERRO", yytext()); }
+. { adicionarToken("ERRO", yytext(), yyline, yycolumn); }

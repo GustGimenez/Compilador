@@ -14,17 +14,15 @@ public class Token {
     private String lexema;
     private String classificacao;
     private int linha;
-    private int coluna;
+    private int colunaInicial;
+    private int colunaFinal;
 
     public Token(String classificacao, String lexema, int linha, int coluna) {
         this.lexema = lexema;
         this.classificacao = classificacao;
         this.linha = linha;
-        this.coluna = coluna;
-        System.out.println("-------------------------------");
-        System.out.println(lexema);
-        System.out.println("Linha: " + linha);
-        System.out.println("Coluna: " + coluna);
+        this.colunaInicial = coluna;
+        this.colunaFinal = colunaInicial + this.lexema.length() - 1;
     }
 
     public void imprimeAttrs() {
@@ -51,8 +49,12 @@ public class Token {
         return linha;
     }
 
-    public int getColuna() {
-        return coluna;
+    public int getColunaInicial() {
+        return colunaInicial;
+    }
+
+    public int getColunaFinal() {
+        return colunaFinal;
     }
 
     

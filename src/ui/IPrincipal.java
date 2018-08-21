@@ -30,6 +30,7 @@ public class IPrincipal extends javax.swing.JFrame {
     private LexicalAnalyzer lexico;
     private GerenciadorArquivos arqs;
     private TableCellRenderer colorir;
+    private ArrayList<String> palavrasReservadas;
 
     /**
      * Creates new form IPrincipal
@@ -37,6 +38,49 @@ public class IPrincipal extends javax.swing.JFrame {
     public IPrincipal() {
         initComponents();
         this.arqs = new GerenciadorArquivos();
+        this.inicializaPalavrasReservadas();
+    }
+    
+    
+    /**
+     * Inicializa o vetor de palavras reservadas com as palavras da linguagem
+     */
+    private void inicializaPalavrasReservadas(){
+        this.palavrasReservadas = new ArrayList();
+        
+        palavrasReservadas.add("if");
+        palavrasReservadas.add("then");
+        palavrasReservadas.add("else");
+        palavrasReservadas.add("do");
+        palavrasReservadas.add("while");
+        palavrasReservadas.add("for");
+        palavrasReservadas.add("var");
+        palavrasReservadas.add("begin");
+        palavrasReservadas.add("end");
+        palavrasReservadas.add("div");
+        palavrasReservadas.add("and");
+        palavrasReservadas.add("not");
+        palavrasReservadas.add("true");
+        palavrasReservadas.add("false");
+        palavrasReservadas.add("program");
+        palavrasReservadas.add("int");
+        palavrasReservadas.add("boolean");
+        palavrasReservadas.add("read");
+        palavrasReservadas.add("write");
+        palavrasReservadas.add("procedure");
+    }
+    
+    /**
+     * Pega o texto no editor de texto e retona a última palavra dividade por
+     * espaço
+     * 
+     * @return String 
+     */
+    private String getUltimaPalavra(){
+        String texto = this.EditorTexto.getText();
+        String[] palavras = texto.split(" ");
+        
+        return palavras[palavras.length-1];
     }
 
     /**
@@ -61,6 +105,12 @@ public class IPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        EditorTexto.setContentType("text"); // NOI18N
+        EditorTexto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                EditorTextoKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(EditorTexto);
 
         TabelaTokens.setModel(new javax.swing.table.DefaultTableModel(
@@ -68,14 +118,14 @@ public class IPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Lexema", "Classificação", "Linha", "Coluna"
+                "Lexema", "Classificação", "Linha", "Coluna Inicial", "Coluna Final"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -91,7 +141,8 @@ public class IPrincipal extends javax.swing.JFrame {
         if (TabelaTokens.getColumnModel().getColumnCount() > 0) {
             TabelaTokens.getColumnModel().getColumn(0).setResizable(false);
             TabelaTokens.getColumnModel().getColumn(1).setResizable(false);
-            TabelaTokens.getColumnModel().getColumn(3).setResizable(false);
+            TabelaTokens.getColumnModel().getColumn(2).setResizable(false);
+            TabelaTokens.getColumnModel().getColumn(4).setResizable(false);
         }
 
         jMenu1.setText("Arquivo");
@@ -157,7 +208,7 @@ public class IPrincipal extends javax.swing.JFrame {
 
     private void AnalisarLexicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalisarLexicoActionPerformed
         String entrada = this.EditorTexto.getText();
-        ArrayList<Token> tokens = new ArrayList();
+        ArrayList<Token> tokens;
         this.lexico = new LexicalAnalyzer(new StringReader(entrada));
         try {
             this.lexico.yylex();
@@ -170,7 +221,7 @@ public class IPrincipal extends javax.swing.JFrame {
 
     private void AbrirArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirArquivoActionPerformed
         // Abertura do arquivo
-        String texto = this.arqs.abrirArquivo().toString();
+        String texto = this.arqs.abrirArquivo();
         texto = texto.replace("[", "");
         texto = texto.replace("]", "");
 
@@ -182,6 +233,10 @@ public class IPrincipal extends javax.swing.JFrame {
         this.arqs.salvarArquivo(this.EditorTexto.getText());
     }//GEN-LAST:event_SalvarArquivoActionPerformed
 
+    private void EditorTextoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EditorTextoKeyReleased
+        
+    }//GEN-LAST:event_EditorTextoKeyReleased
+
     private void populaTabelaTokens(ArrayList<Token> tokens) {
         this.colorir = new Colorir(tokens);
         TableColumn coluna;
@@ -192,7 +247,8 @@ public class IPrincipal extends javax.swing.JFrame {
             tabela.setValueAt(tokens.get(i).getLexema(), i, 0);
             tabela.setValueAt(tokens.get(i).getClassificacao(), i, 1);
             tabela.setValueAt(tokens.get(i).getLinha(), i, 2);
-            tabela.setValueAt(tokens.get(i).getColuna(), i, 3);
+            tabela.setValueAt(tokens.get(i).getColunaInicial(), i, 3);
+            tabela.setValueAt(tokens.get(i).getColunaFinal(), i, 4);
         }
         
         for (int i = 0; i < tabela.getColumnCount(); i++) {
