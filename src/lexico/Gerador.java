@@ -12,7 +12,7 @@ public class Gerador {
 
     public static void main(String[] args) {
 
-        String file = "E:/Users/PC-GUSTAVO/Desktop/Compilador/src/lexico/language.lex";
+        String file = "src/lexico/language.lex";
 
         File sourceCode = new File(file);
 
