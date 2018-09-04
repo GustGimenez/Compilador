@@ -1,9 +1,7 @@
 package lexico;
 
 import java.util.ArrayList;
-
 %%
-
 
 %{
 private ArrayList<Token> tokens;
@@ -29,36 +27,39 @@ public ArrayList getTokens(){
 %column
 %line
 
-TERMINADOR_DE_LINHA  = \r|\n|\r\n
-CARACTER_ENTRADA     = [^\r\n]
-ESPACAMENTO          = {TERMINADOR_DE_LINHA} | [ \t\f]
-PONTO = [.]
-VIRGULA = [,]
-PONTO_VIRGULA = [;]
+BRANCO = [\n| |\t|\r]
+PONTO = "."
+VIRGULA = ","
+PONTO_VIRGULA = ";"
 
+DIGITO = [0-9]
+LETRA = [_|a-zA-Z]
 
-NUM_INT = 0|[:digit:][:digit:]*
-NUM_REAL = [:digit:][:digit:]*{PONTO}[:digit:][:digit:]*
+NUM_INT = 0|{DIGITO}{DIGITO}*
+NUM_REAL = {DIGITO}{DIGITO}*{PONTO}{DIGITO}{DIGITO}*
 OPSOMA = "+"
 OPSUB = "-"
 OPMUL = "*"
-OPDIV = "/"
+OPDIV = "div"
 AP = "("
 FP = ")"
 OP_MENOR = "<" 
 OP_MAIOR = ">" 
 OP_MENOR_IGUAL = "<=" 
 OP_MAIOR_IGUAL = ">="
-OP_ATRI = "="
+OP_ATRI = ":="
 OP_IGUAL = "=="
-OP_DIF = "!="
+OP_DIF = "<>"
 
 
-PALAVRA_RESERVADA = (if|then|else|do|while|for|var|begin|end|div|and|not|true|false|program|int|boolean|read|write|procedure)
-IDENTIFICADOR = [:jletter:][:jletterdigit:]*
+PALAVRA_RESERVADA = "if|then|else|do|while|for|var|begin|end|and|not|true|false|program|int|boolean|read|write|procedure"
+IDENTIFICADOR = {LETRA}|{LETRA}{DIGITO}*
 
 %%
 
+{VIRGULA}					{}
+{PONTO_VIRGULA}				{}
+{BRANCO}					{}
 {NUM_INT}                   { adicionarToken("NUM_INT", yytext(), yyline, yycolumn); }
 {NUM_REAL}                  { adicionarToken("NUM_REAL", yytext(), yyline, yycolumn); }
 {OPSOMA}                    { adicionarToken("OPSOMA", yytext(), yyline, yycolumn); }
@@ -76,11 +77,5 @@ IDENTIFICADOR = [:jletter:][:jletterdigit:]*
 {OP_DIF}                    { adicionarToken("OP_DIF", yytext(), yyline, yycolumn); }
 {PALAVRA_RESERVADA}         { adicionarToken("PALAVRA_RESERVADA", yytext(), yyline, yycolumn); }
 {IDENTIFICADOR}             { adicionarToken("IDENTIFICADOR", yytext(), yyline, yycolumn); }
-{TERMINADOR_DE_LINHA}       {}
-{CARACTER_ENTRADA}          {}
-{ESPACAMENTO}               {}
-{PONTO}                     {}
-{VIRGULA}                   {}
-{PONTO_VIRGULA}             {}
 
 . { adicionarToken("ERRO", yytext(), yyline, yycolumn); }
