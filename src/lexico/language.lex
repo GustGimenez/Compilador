@@ -1,7 +1,6 @@
 package lexico;
 
 import java.util.ArrayList;
-import java_cup.runtime.Symbol;
 %%
 
 %{
@@ -28,12 +27,12 @@ public ArrayList getTokens(){
 %type void
 %column
 %line
-%cup
 
 BRANCO = [\n| |\t|\r]
 PONTO = "."
 VIRGULA = ","
 PONTO_VIRGULA = ";"
+DOIS_PONTOS = ":"
 
 DIGITO = [0-9]
 LETRA = [_|a-zA-Z]
@@ -56,12 +55,13 @@ OP_DIF = "<>"
 
 
 PALAVRA_RESERVADA = "if|then|else|do|while|for|var|begin|end|and|not|true|false|program|int|boolean|read|write|procedure"
-IDENTIFICADOR = {LETRA}|{LETRA}{DIGITO}*
+IDENTIFICADOR = {LETRA}({LETRA}|{DIGITO})*
 
 %%
 
 {VIRGULA}					{}
 {PONTO_VIRGULA}				{}
+{DOIS_PONTOS}				{}
 {BRANCO}					{}
 {NUM_INT}                   { adicionarToken("NUM_INT", yytext(), yyline, yycolumn); }
 {NUM_REAL}                  { adicionarToken("NUM_REAL", yytext(), yyline, yycolumn); }
