@@ -1,6 +1,7 @@
 package lexico;
 
 import java.util.ArrayList;
+import java_cup.runtime.Symbol;
 %%
 
 %{
@@ -22,10 +23,12 @@ public ArrayList getTokens(){
 %}
 
 
+%public
 %class LexicalAnalyzer
 %type void
 %column
 %line
+%cup
 
 BRANCO = [\n| |\t|\r]
 PONTO = "."
