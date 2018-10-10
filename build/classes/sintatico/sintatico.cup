@@ -1,0 +1,127 @@
+package sintatico;
+
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+import java.io.StringReader;
+
+
+parser code {:
+	public void report_error(String message, Object info)  {
+        System.out.println("Warning - " + message);
+    }
+
+    public void report_fatal_error(String message, Object info)  {
+        System.out.println("Error - " + message);
+        System.exit(-1);
+    }
+:};
+
+
+/**	Terminais **/
+terminal palavra_if, palavra_then, palavra_else, palavra_do, palavra_while;
+terminal palavra_var, palavra_begin, palavra_end, tipo_int, tipo_boolean;
+terminal palavra_program, palavra_or, palavra_not, palavra_and, palavra_procedure;
+
+terminal VIRGULA, PONTO_VIRGULA, DOIS_PONTOS;
+terminal NUM_INT, NUM_REAL, OPSOMA, FIM;
+terminal OPSUB, OPMUL, OPDIV, AP, FP, OP_MENOR;
+terminal OP_MAIOR, OP_MENOR_IGUAL, OP_MAIOR_IGUAL, OP_ATRI;
+terminal OP_IGUAL, OP_DIF, IDENTIFICADOR, DESCONHECIDO;
+
+
+/** Não terminais **/
+non terminal Programa, Corpo, Declaracoes_Variaveis;
+non terminal Declaracoes_Subrotinas, Codigo;
+non terminal Tipo, Identificadores;
+non terminal Comando, Atribuicao, Comando_Composto;
+non terminal Chamada_Procedimento, Declaracao;
+non terminal Casado, Nao_Casado, Condicional_Casado;
+non terminal Condicional_NCasado, Repetitivo_NCasado;
+non terminal Expressao, Parametros_Formais;
+non terminal Repetitivo_Casado, Expressao_Simples;
+non terminal Relacao, Termo, Expressao_Aux, Fator;
+non terminal Lista_Expressoes, Numero;
+
+start with Programa;
+
+Programa ::= palavra_program Corpo FIM;
+
+Corpo ::= IDENTIFICADOR PONTO_VIRGULA Declaracoes_Variaveis Declaracoes_Subrotinas Codigo;
+
+Declaracoes_Variaveis ::= Declaracoes_Variaveis Tipo Identificadores PONTO_VIRGULA |
+						  ;
+
+Identificadores ::= Identificadores IDENTIFICADOR PONTO_VIRGULA |
+					Identificadores IDENTIFICADOR VIRGULA |
+					IDENTIFICADOR PONTO_VIRGULA;
+
+Tipo ::= tipo_int | tipo_boolean;
+
+Declaracoes_Subrotinas ::= palavra_procedure IDENTIFICADOR AP
+						   Parametros_Formais FP PONTO_VIRGULA
+						   Declaracoes_Variaveis Codigo PONTO_VIRGULA;
+
+Parametros_Formais ::= palavra_var Identificadores DOIS_PONTOS Tipo |
+					   Parametros_Formais VIRGULA palavra_var Identificadores DOIS_PONTOS Tipo;
+
+Codigo ::= palavra_begin Comando palavra_end;
+
+Comando ::= |
+			Comando Atribuicao |
+			Comando Chamada_Procedimento |
+			Comando Comando_Composto |
+			Comando Declaracao;
+
+Atribuicao ::= IDENTIFICADOR OP_ATRI Expressao;
+
+Chamada_Procedimento ::= IDENTIFICADOR AP
+						 Lista_Expressoes FP;
+
+Declaracao ::= Casado |
+			   Nao_Casado;
+
+Condicional_NCasado ::= palavra_if AP Expressao FP palavra_then Declaracao |
+						palavra_if AP Expressao FP palavra_then Casado 
+						palavra_else Nao_Casado;
+
+Condicional_Casado ::= palavra_if AP Expressao FP palavra_then Casado palavra_else Casado;
+
+Repetitivo_NCasado ::= palavra_while AP Expressao FP palavra_do Nao_Casado;
+
+Repetitivo_Casado ::= palavra_while AP Expressao FP palavra_do Casado;
+
+Casado ::= Condicional_Casado |
+		   Repetitivo_Casado;
+
+Nao_Casado ::= Condicional_NCasado |
+			   Repetitivo_NCasado;
+
+Expressao ::= Expressao_Simples |
+			  Expressao_Simples Relacao Expressao_Simples;
+
+Relacao ::= OP_IGUAL | OP_DIF | OP_MENOR_IGUAL | OP_MAIOR_IGUAL |
+			OP_MENOR | OP_MAIOR;
+
+Expressao_Simples ::= OPSUB Termo Expressao_Aux|
+					  OPSOMA Termo Expressao_Aux;
+
+Expressao_Aux ::= Expressao_Aux OPSOMA Termo |
+				  Expressao_Aux OPSUB Termo |
+				  Expressao_Aux palavra_or Termo|
+				  ;
+
+Termo ::= Termo OPMUL Fator |
+		  Termo OPDIV Fator |
+		  Termo palavra_and Fator |
+		  Fator;
+
+Fator ::= IDENTIFICADOR | Numero | AP Expressao FP | palavra_not Fator;
+
+/*Variavel ::= IDENTIFICADOR Expressao| 
+			 IDENTIFICADOR;*/
+
+Lista_Expressoes ::= Lista_Expressoes VIRGULA Expressao|
+					 Expressao;
+
+Numero ::= NUM_INT | NUM_REAL;

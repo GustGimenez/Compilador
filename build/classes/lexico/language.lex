@@ -1,36 +1,24 @@
 package lexico;
 
-import java.util.ArrayList;
+import java_cup.runtime.Symbol;
+
 %%
 
-%{
-private ArrayList<Token> tokens;
 
-private void adicionarToken(String classificacao, String lexema, int linha, int coluna) {
-    this.tokens.add(new Token(classificacao, lexema, linha, coluna));
-}
-
-public LexicalAnalyzer(java.io.Reader in){
-    this.tokens = new ArrayList();
-    this.zzReader = in;
-}
-
-public ArrayList getTokens(){
-    return this.tokens;
-}
-
-%}
-
-
+%cup
+%public
+%type java_cup.runtime.Symbol
 %class LexicalAnalyzer
-%type void
-%column
 %line
+%column
 
 BRANCO = [\n| |\t|\r]
 PONTO = "."
 VIRGULA = ","
 PONTO_VIRGULA = ";"
+DOIS_PONTOS = ":"
+
+
 
 DIGITO = [0-9]
 LETRA = [_|a-zA-Z]
@@ -51,31 +39,68 @@ OP_ATRI = ":="
 OP_IGUAL = "=="
 OP_DIF = "<>"
 
+palavra_begin = "begin"
+palavra_end = "end"
+palavra_if = "if" 
+palavra_then = "then"
+palavra_else = "else"
+palavra_do = "do"
+palavra_while = "while"
+palavra_var = "var"
+palavra_procedure = "procedure"
+palavra_program = "program"
+palavra_or = "or"
+palavra_and = "and"
+palavra_not = "not"
+tipo_int = "int"
+tipo_boolean = "boolean"
 
-PALAVRA_RESERVADA = "if|then|else|do|while|for|var|begin|end|and|not|true|false|program|int|boolean|read|write|procedure"
-IDENTIFICADOR = {LETRA}|{LETRA}{DIGITO}*
+IDENTIFICADOR = {LETRA}({LETRA}|{DIGITO})*
 
 %%
 
-{VIRGULA}					{}
-{PONTO_VIRGULA}				{}
-{BRANCO}					{}
-{NUM_INT}                   { adicionarToken("NUM_INT", yytext(), yyline, yycolumn); }
-{NUM_REAL}                  { adicionarToken("NUM_REAL", yytext(), yyline, yycolumn); }
-{OPSOMA}                    { adicionarToken("OPSOMA", yytext(), yyline, yycolumn); }
-{OPSUB}                     { adicionarToken("OPSUB", yytext(), yyline, yycolumn); }
-{OPMUL}                     { adicionarToken("OPMUL", yytext(), yyline, yycolumn); }
-{OPDIV}                     { adicionarToken("OPDIV", yytext(), yyline, yycolumn); }
-{AP}                        { adicionarToken("AP", yytext(), yyline, yycolumn); }
-{FP}                        { adicionarToken("FP", yytext(), yyline, yycolumn); }
-{OP_MENOR}                  { adicionarToken("OP_MENOR", yytext(), yyline, yycolumn); }
-{OP_MAIOR}                  { adicionarToken("OP_MAIOR", yytext(), yyline, yycolumn); }
-{OP_MENOR_IGUAL}            { adicionarToken("OP_MENOR_IGUAL", yytext(), yyline, yycolumn); }
-{OP_MAIOR_IGUAL}            { adicionarToken("OP_MAIOR_IGUAL", yytext(), yyline, yycolumn); }
-{OP_ATRI}                   { adicionarToken("OP_ATRI", yytext(), yyline, yycolumn); }
-{OP_IGUAL}                  { adicionarToken("OP_IGUAL", yytext(), yyline, yycolumn); }
-{OP_DIF}                    { adicionarToken("OP_DIF", yytext(), yyline, yycolumn); }
-{PALAVRA_RESERVADA}         { adicionarToken("PALAVRA_RESERVADA", yytext(), yyline, yycolumn); }
-{IDENTIFICADOR}             { adicionarToken("IDENTIFICADOR", yytext(), yyline, yycolumn); }
+<YYINITIAL> {
 
-. { adicionarToken("ERRO", yytext(), yyline, yycolumn); }
+	{VIRGULA}                   {}
+	{PONTO_VIRGULA}             {}
+	{DOIS_PONTOS}               {}
+	{BRANCO}                    {}
+
+	{palavra_begin}             { return new Symbol(Sym.palavra_begin); }
+	{palavra_end}               { return new Symbol(Sym.palavra_end); }
+	{palavra_if}                { return new Symbol(Sym.palavra_if); }
+	{palavra_then}              { return new Symbol(Sym.palavra_then); }
+	{palavra_else}              { return new Symbol(Sym.palavra_else); }
+	{palavra_do}                { return new Symbol(Sym.palavra_do); }
+	{palavra_while}             { return new Symbol(Sym.palavra_while); }
+	{palavra_var}               { return new Symbol(Sym.palavra_var); }
+	{palavra_procedure}         { return new Symbol(Sym.palavra_procedure); }
+	{palavra_program}           { return new Symbol(Sym.palavra_program); }
+	{palavra_and}               { return new Symbol(Sym.palavra_and); }
+	{palavra_not}               { return new Symbol(Sym.palavra_not); }
+	{palavra_or}                { return new Symbol(Sym.palavra_or );}
+
+	{tipo_int}                  { return new Symbol(Sym.tipo_int); }
+	{tipo_boolean}              { return new Symbol(Sym.tipo_boolean); }
+
+	{NUM_INT}                   { return new Symbol(Sym.NUM_INT); }
+	{NUM_REAL}                  { return new Symbol(Sym.NUM_REAL); }
+	{OPSOMA}                    { return new Symbol(Sym.OPSOMA); }
+	{OPSUB}                     { return new Symbol(Sym.OPSUB); }
+	{OPMUL}                     { return new Symbol(Sym.OPMUL); }
+	{OPDIV}                     { return new Symbol(Sym.OPDIV); }
+	{AP}                        { return new Symbol(Sym.AP); }
+	{FP}                        { return new Symbol(Sym.FP); }
+	{OP_MENOR}                  { return new Symbol(Sym.OP_MENOR); }
+	{OP_MAIOR}                  { return new Symbol(Sym.OP_MAIOR); }
+	{OP_MENOR_IGUAL}            { return new Symbol(Sym.OP_MENOR_IGUAL); }
+	{OP_MAIOR_IGUAL}            { return new Symbol(Sym.OP_MAIOR_IGUAL); }
+	{OP_ATRI}                   { return new Symbol(Sym.OP_ATRI); }
+	{OP_IGUAL}                  { return new Symbol(Sym.OP_IGUAL); }
+	{OP_DIF}                    { return new Symbol(Sym.OP_DIF); }
+	{IDENTIFICADOR}             { return new Symbol(Sym.IDENTIFICADOR); }
+
+	"." { return new Symbol(Sym.FIM);}
+}
+
+. { return new Symbol(Sym.DESCONHECIDO);}
