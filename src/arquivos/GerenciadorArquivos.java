@@ -50,7 +50,7 @@ public class GerenciadorArquivos {
                 // Loop para a leitura do arquivo
                 linha = in.readLine();
                 while (linha != null) {
-                    texto.append(linha);
+                    texto.append(linha + "\n");
                     linha = in.readLine();
                 }
 

@@ -1,136 +1,127 @@
-package lexico;
+package sintatico;
 
 import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
-
+import java.io.StringReader;
 
 
 parser code {:
+	public void report_error(String message, Object info)  {
+        System.out.println("Warning - " + message);
+    }
 
+    public void report_fatal_error(String message, Object info)  {
+        System.out.println("Error - " + message);
+        System.exit(-1);
+    }
 :};
 
-/**	Terminais **/
-terminal if, then, else, do, while, for, var, begin, end;
-terminal and, not, true, false, program, int, boolean;
-terminal read, write, procedure;
 
-terminal BRANCO, PONTO, VIRGULA, PONTO_VIRGULA;	
-terminal DIGITO, LETRA;
-terminal NUM_INT, NUM_REAL, OPSOMA, OPSOMA;
-terminal OPSUB, OPMUL, OPDIV, AP, FP, OP_MENOR, OP_MAIOR;
-terminal OP_MAIOR, OP_MENOR_IGUAL, OP_MAIOR_IGHAL, OP_ATRI;
-terminal OP_IGUAL, OP_DIF, IDENTIFICADOR;
+/**	Terminais **/
+terminal palavra_if, palavra_then, palavra_else, palavra_do, palavra_while;
+terminal palavra_var, palavra_begin, palavra_end, tipo_int, tipo_boolean;
+terminal palavra_program, palavra_or, palavra_not, palavra_and, palavra_procedure;
+
+terminal VIRGULA, PONTO_VIRGULA, DOIS_PONTOS;
+terminal NUM_INT, NUM_REAL, OPSOMA, FIM;
+terminal OPSUB, OPMUL, OPDIV, AP, FP, OP_MENOR;
+terminal OP_MAIOR, OP_MENOR_IGUAL, OP_MAIOR_IGUAL, OP_ATRI;
+terminal OP_IGUAL, OP_DIF, IDENTIFICADOR, DESCONHECIDO;
 
 
 /** Não terminais **/
-nonterminal Pograma, Corpo, Bloco, Declaracoes_Variaveis;
-nonterminal Parte_Declaracoes_Variaveis, Comando_Composto;
-nonterminal Declaracoes_Subrotinas, Declaracao_Variaveis;
-nonterminal Declaracao_Variavel, Tipo, Identificadores;
-nonterminal Procedimento, Parametros, Comando, Atribuicao;
-nonterminal Chamanda_Procedimento, Comando_Condicional1;
-nonterminal Comando_Repetitivo1, Variavel, Expressao;
-nonterminal Chamada_Procedimento, Lista_Expressoes;
-nonterminal Expressao_Simples, Relacao, Termo, Fator;
-nonterminal Termo_Aux, Numero, 
-
-
-
-/** Esboço da sintaxe da linguagem **/
-/**	Aquilo que está entre {} é fechamento (
-	ver como faz isso usando CUP) **/
-/** Aquilo que esta entre [] é opcional **/
-
+non terminal Programa, Corpo, Declaracoes_Variaveis;
+non terminal Declaracoes_Subrotinas, Codigo;
+non terminal Tipo, Identificadores;
+non terminal Comando, Atribuicao, Comando_Composto;
+non terminal Chamada_Procedimento, Declaracao;
+non terminal Casado, Nao_Casado, Condicional_Casado;
+non terminal Condicional_NCasado, Repetitivo_NCasado;
+non terminal Expressao, Parametros_Formais;
+non terminal Repetitivo_Casado, Expressao_Simples;
+non terminal Relacao, Termo, Expressao_Aux, Fator;
+non terminal Lista_Expressoes, Numero;
 
 start with Programa;
 
+Programa ::= palavra_program Corpo FIM;
 
-/** --- Programa e Bloco --- **/
+Corpo ::= IDENTIFICADOR PONTO_VIRGULA Declaracoes_Variaveis Declaracoes_Subrotinas Codigo;
 
-Programa ::= program IDENTIFICADOR PONTO_VIRGULA Corpo;
+Declaracoes_Variaveis ::= Declaracoes_Variaveis Tipo Identificadores PONTO_VIRGULA |
+						  ;
 
-Bloco ::= Parte_Declaracoes_Variaveis
-       	  Declaracoes_Subrotinas
-		  Comando_Composto;
+Identificadores ::= Identificadores IDENTIFICADOR PONTO_VIRGULA |
+					Identificadores IDENTIFICADOR VIRGULA |
+					IDENTIFICADOR PONTO_VIRGULA;
 
+Tipo ::= tipo_int | tipo_boolean;
 
-/** --- Declarações --- **/
+Declaracoes_Subrotinas ::= palavra_procedure IDENTIFICADOR AP
+						   Parametros_Formais FP PONTO_VIRGULA
+						   Declaracoes_Variaveis Codigo PONTO_VIRGULA;
 
-Parte_Declaracao_Variaveis ::= 
-			Declaracoes_Variaveis PONTO_VIRGULA |
-			Declaracoes_Variaveis PONTO_VIRGULA Parte_Declaracao_Variaveis;
+Parametros_Formais ::= palavra_var Identificadores DOIS_PONTOS Tipo |
+					   Parametros_Formais VIRGULA palavra_var Identificadores DOIS_PONTOS Tipo;
 
-Declaracoes_Variaveis ::= Declaracao_Variaveis Declaracao_Variavel
-						  | Declaracao_Variavel;
+Codigo ::= palavra_begin Comando palavra_end;
 
-Declaracao_Variavel ::= Tipo Identificadores;
+Comando ::= |
+			Comando Atribuicao |
+			Comando Chamada_Procedimento |
+			Comando Comando_Composto |
+			Comando Declaracao;
 
-Declaracoes_Subrotinas ::= Declaracoes_Subrotinas Procedimento 	
-						   | Procedimento;
+Atribuicao ::= IDENTIFICADOR OP_ATRI Expressao;
 
-Identificadores ::= 
-			Identificadores IDENTIFICADOR | 
-			IDENTIFICADOR;
+Chamada_Procedimento ::= IDENTIFICADOR AP
+						 Lista_Expressoes FP;
 
-Pprocedimento ::= 
-	procedure IDENTIFICADOR Parametros PONTO_VIRGULA Bloco |
-	procedure IDENTIFICADOR PONTO_VIRGULA Bloco;
+Declaracao ::= Casado |
+			   Nao_Casado;
 
-Parametros ::= var Identificadores DOIS_PONTOS Tipo |
-			   Identificadores DOIS_PONTOS Tipo |
-			   var Identificadores DOIS_PONTOS Tipo Parametros |
-			   Identificadores DOIS_PONTOS Tipo Parametros;
+Condicional_NCasado ::= palavra_if AP Expressao FP palavra_then Declaracao |
+						palavra_if AP Expressao FP palavra_then Casado 
+						palavra_else Nao_Casado;
 
+Condicional_Casado ::= palavra_if AP Expressao FP palavra_then Casado palavra_else Casado;
 
-/** --- Comandos --- **/
+Repetitivo_NCasado ::= palavra_while AP Expressao FP palavra_do Nao_Casado;
 
-Comando_Composto ::= begin Comando | 
-						  begin Comando PONTO_VIRGULA Comando end;
+Repetitivo_Casado ::= palavra_while AP Expressao FP palavra_do Casado;
 
-Comando ::=
-			Atribuicao|Chamanda_Procedimento|Comando_Composto |
-			Comando_Condicional1|Comando_Repetitivo1;
+Casado ::= Condicional_Casado |
+		   Repetitivo_Casado;
 
- Atribuicao ::= Variavel OP_ATR Expressao;
+Nao_Casado ::= Condicional_NCasado |
+			   Repetitivo_NCasado;
 
-Chamada_Procedimento ::= IDENTIFICADOR Lista_Expressoes |
-							  IDENTIFICADOR;
+Expressao ::= Expressao_Simples |
+			  Expressao_Simples Relacao Expressao_Simples;
 
-Comando_Condicional1 ::= 
-		if Expressao then Comando else Comando |
-		if Expressao then Comando;
+Relacao ::= OP_IGUAL | OP_DIF | OP_MENOR_IGUAL | OP_MAIOR_IGUAL |
+			OP_MENOR | OP_MAIOR;
 
-Comando_Repititivo1 ::= while Expressao do Comando;
+Expressao_Simples ::= OPSUB Termo Expressao_Aux|
+					  OPSOMA Termo Expressao_Aux;
 
+Expressao_Aux ::= Expressao_Aux OPSOMA Termo |
+				  Expressao_Aux OPSUB Termo |
+				  Expressao_Aux palavra_or Termo|
+				  ;
 
-/** --- Expressões --- **/
+Termo ::= Termo OPMUL Fator |
+		  Termo OPDIV Fator |
+		  Termo palavra_and Fator |
+		  Fator;
 
-Expressao ::=
- 			Expressao_Simples Relacao Expressao_Simples |
- 			Expressao_Simples;
+Fator ::= IDENTIFICADOR | Numero | AP Expressao FP | palavra_not Fator;
 
-Relacao ::= OP_IGUAL|OP_DIF|OP_MENOR|OP_MAIOR
-				   |OP_MENOR_IGUAL|OP_MAIOR_IGUAL;
+/*Variavel ::= IDENTIFICADOR Expressao| 
+			 IDENTIFICADOR;*/
 
-Expressao_Simples ::= (OP_SOMA|OP_SUB Termo) |
-					  Termo |
-					  (OP_SOMA|OP_SUB Termo Expressao_Simples) |
-					  Termo Expressao_Simples;
-
-Termo ::= Fator | Fator (OP_MUL|OP_DIV|AND) Fator Termo_Aux;
-
-Termo_Aux ::= (OP_MUL|OP_DIV|AND) Fator Termo_Aux | 
-			  (OP_MUL|OP_DIV|AND) Fator;
-
-Fator ::= Variavel|Numero|AP Expressao FP|NOT Fator;
-
-Variavel ::= IDENTIFICADOR|IDENTIFICADOR Expressao;
-
-Lista_Expressoes ::= Expressao VIRGULA Lista_Expressoes |
+Lista_Expressoes ::= Lista_Expressoes VIRGULA Expressao|
 					 Expressao;
 
-
-/** --- Números --- **/
-
-Numero ::= DIGITO | DIGITO Numero;
+Numero ::= NUM_INT | NUM_REAL;

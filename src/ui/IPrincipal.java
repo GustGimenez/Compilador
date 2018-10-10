@@ -13,6 +13,9 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java_cup.runtime.DefaultSymbolFactory;
+import java_cup.runtime.Symbol;
+import java_cup.runtime.SymbolFactory;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +23,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import lexico.Token;
 import lexico.LexicalAnalyzer;
+import sintatico.Sym;
 
 /**
  *
@@ -40,14 +44,13 @@ public class IPrincipal extends javax.swing.JFrame {
         this.arqs = new GerenciadorArquivos();
         this.inicializaPalavrasReservadas();
     }
-    
-    
+
     /**
      * Inicializa o vetor de palavras reservadas com as palavras da linguagem
      */
-    private void inicializaPalavrasReservadas(){
+    private void inicializaPalavrasReservadas() {
         this.palavrasReservadas = new ArrayList();
-        
+
         palavrasReservadas.add("if");
         palavrasReservadas.add("then");
         palavrasReservadas.add("else");
@@ -69,18 +72,61 @@ public class IPrincipal extends javax.swing.JFrame {
         palavrasReservadas.add("write");
         palavrasReservadas.add("procedure");
     }
-    
+
     /**
      * Pega o texto no editor de texto e retona a última palavra dividade por
      * espaço
-     * 
-     * @return String 
+     *
+     * @return String
      */
-    private String getUltimaPalavra(){
+    private String getUltimaPalavra() {
         String texto = this.EditorTexto.getText();
         String[] palavras = texto.split(" ");
-        
-        return palavras[palavras.length-1];
+
+        return palavras[palavras.length - 1];
+    }
+
+    /**
+     * Retorna o texto do terminal de acordo com o código
+     *
+     * @return String
+     */
+    public String getTerminal(int sym) {
+        for (int i = 0; i < Sym.terminalNames.length; i++) {
+            if (sym == i) {
+                return Sym.terminalNames[i];
+            }
+        }
+        return "UNKNOWN";
+    }
+
+    /**
+     * Dada a entrada do usuário, passa pelo analisador léxico e formula o array
+     * de tokens para popular a tabela
+     *
+     * @return ArrayList<Token>
+     */
+    private ArrayList<Token> getTokens() {
+        try {
+            ArrayList<Token> tokens = new ArrayList();
+            //String classificacao, String lexema, int linha, int coluna
+            Symbol s = this.lexico.next_token();
+            while (s.sym != 0) {
+                Token token = new Token(this.getTerminal(s.sym),
+                        this.lexico.yytext(),
+                        this.lexico.getYyline() + 1,
+                        this.lexico.getYycolumn() + 1);
+                tokens.add(token);
+                s = this.lexico.next_token();
+            }
+            return tokens;
+            /**
+             * @param args the command line arguments
+             */
+        } catch (IOException ex) {
+            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
@@ -102,6 +148,7 @@ public class IPrincipal extends javax.swing.JFrame {
         SalvarArquivo = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         AnalisarLexico = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -167,16 +214,25 @@ public class IPrincipal extends javax.swing.JFrame {
 
         BarraMenu.add(jMenu1);
 
-        jMenu2.setText("Analisar");
+        jMenu2.setText("Análise");
 
         AnalisarLexico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        AnalisarLexico.setText("Léxico");
+        AnalisarLexico.setText("Léxica");
         AnalisarLexico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AnalisarLexicoActionPerformed(evt);
             }
         });
         jMenu2.add(AnalisarLexico);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Sintática");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
 
         BarraMenu.add(jMenu2);
 
@@ -210,13 +266,9 @@ public class IPrincipal extends javax.swing.JFrame {
         String entrada = this.EditorTexto.getText();
         ArrayList<Token> tokens;
         this.lexico = new LexicalAnalyzer(new StringReader(entrada));
-        try {
-            this.lexico.yylex();
-            tokens = this.lexico.getTokens();
-            this.populaTabelaTokens(tokens);
-        } catch (IOException ex) {
-            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        tokens = this.getTokens();
+        this.populaTabelaTokens(tokens);
     }//GEN-LAST:event_AnalisarLexicoActionPerformed
 
     private void AbrirArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirArquivoActionPerformed
@@ -234,14 +286,18 @@ public class IPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_SalvarArquivoActionPerformed
 
     private void EditorTextoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EditorTextoKeyReleased
-        
+
     }//GEN-LAST:event_EditorTextoKeyReleased
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void populaTabelaTokens(ArrayList<Token> tokens) {
         this.colorir = new Colorir(tokens);
         TableColumn coluna;
         DefaultTableModel tabela = (DefaultTableModel) this.TabelaTokens.getModel();
-        
+
         tabela.setNumRows(tokens.size());
         for (int i = 0; i < tokens.size(); i++) {
             tabela.setValueAt(tokens.get(i).getLexema(), i, 0);
@@ -250,10 +306,10 @@ public class IPrincipal extends javax.swing.JFrame {
             tabela.setValueAt(tokens.get(i).getColunaInicial(), i, 3);
             tabela.setValueAt(tokens.get(i).getColunaFinal(), i, 4);
         }
-        
+
         for (int i = 0; i < tabela.getColumnCount(); i++) {
             coluna = this.TabelaTokens.getColumnModel().getColumn(i);
-            coluna.setCellRenderer(colorir);
+            coluna.setCellRenderer(this.colorir);
         }
     }
 
@@ -293,9 +349,9 @@ public class IPrincipal extends javax.swing.JFrame {
     }
 
     private class Colorir extends DefaultTableCellRenderer {
-        
+
         ArrayList<Token> tokens;
-        
+
         public Colorir(ArrayList<Token> tokens) {
             this.tokens = tokens;
             setOpaque(true);
@@ -306,11 +362,11 @@ public class IPrincipal extends javax.swing.JFrame {
                 JTable table,
                 Object value, boolean isSelected, boolean hasFocus,
                 int row, int column) {
-            
-            super.getTableCellRendererComponent(table, value, isSelected, 
+
+            super.getTableCellRendererComponent(table, value, isSelected,
                     hasFocus, row, column);
-            
-            if (this.tokens.get(row).getClassificacao().equals("ERRO")) {
+
+            if (this.tokens.get(row).getClassificacao().equals("DESCONHECIDO")) {
                 setBackground(Color.RED);
             } else {
                 setBackground(table.getBackground());
@@ -328,6 +384,7 @@ public class IPrincipal extends javax.swing.JFrame {
     private javax.swing.JTable TabelaTokens;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables

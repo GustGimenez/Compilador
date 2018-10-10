@@ -3,10 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Users/PC-GUSTAVO/Desktop/Compilador/src/lexico/LexicalAnalyzer.java</file>
-            <file>file:/E:/Users/PC-GUSTAVO/Desktop/Compilador/src/ui/IPrincipal.java</file>
-            <file>file:/E:/Users/PC-GUSTAVO/Desktop/Compilador/src/lexico/Token.java</file>
-            <file>file:/E:/Users/PC-GUSTAVO/Desktop/Compilador/src/lexico/Gerador.java</file>
+            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/sintatico/sintatico.cup</file>
+            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/ui/IPrincipal.java</file>
+            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/Gerador.java</file>
+            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/LexicalAnalyzer.java</file>
+            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/Token.java</file>
+            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/language.lex</file>
         </group>
     </open-files>
 </project-private>
