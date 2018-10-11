@@ -23,6 +23,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import lexico.Token;
 import lexico.LexicalAnalyzer;
+import sintatico.Parser;
 import sintatico.Sym;
 
 /**
@@ -32,6 +33,7 @@ import sintatico.Sym;
 public class IPrincipal extends javax.swing.JFrame {
 
     private LexicalAnalyzer lexico;
+    private Parser sintatico;
     private GerenciadorArquivos arqs;
     private TableCellRenderer colorir;
     private ArrayList<String> palavrasReservadas;
@@ -148,7 +150,7 @@ public class IPrincipal extends javax.swing.JFrame {
         SalvarArquivo = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         AnalisarLexico = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        AnalisarSintatico = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -225,14 +227,14 @@ public class IPrincipal extends javax.swing.JFrame {
         });
         jMenu2.add(AnalisarLexico);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Sintática");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        AnalisarSintatico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        AnalisarSintatico.setText("Sintática");
+        AnalisarSintatico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                AnalisarSintaticoActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        jMenu2.add(AnalisarSintatico);
 
         BarraMenu.add(jMenu2);
 
@@ -289,9 +291,18 @@ public class IPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_EditorTextoKeyReleased
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void AnalisarSintaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalisarSintaticoActionPerformed
+        SymbolFactory sf = new DefaultSymbolFactory();
+        String entrada = this.EditorTexto.getText();
+        this.lexico = new LexicalAnalyzer((new StringReader(entrada)));
+        
+        this.sintatico = new Parser(lexico, sf);
+        try {
+            this.sintatico.debug_parse();
+        } catch (Exception ex) {
+            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_AnalisarSintaticoActionPerformed
 
     private void populaTabelaTokens(ArrayList<Token> tokens) {
         this.colorir = new Colorir(tokens);
@@ -378,13 +389,13 @@ public class IPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AbrirArquivo;
     private javax.swing.JMenuItem AnalisarLexico;
+    private javax.swing.JMenuItem AnalisarSintatico;
     private javax.swing.JMenuBar BarraMenu;
     private javax.swing.JTextPane EditorTexto;
     private javax.swing.JMenuItem SalvarArquivo;
     private javax.swing.JTable TabelaTokens;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables

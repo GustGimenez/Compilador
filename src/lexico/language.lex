@@ -4,6 +4,18 @@ import java_cup.runtime.Symbol;
 
 %%
 
+%{
+
+    public int getYyline() {
+        return yyline;
+    }
+
+    public int getYycolumn() {
+        return yycolumn;
+    }
+
+%}
+
 
 %cup
 %public
@@ -61,10 +73,10 @@ IDENTIFICADOR = {LETRA}({LETRA}|{DIGITO})*
 
 <YYINITIAL> {
 
-	{VIRGULA}                   {}
-	{PONTO_VIRGULA}             {}
-	{DOIS_PONTOS}               {}
 	{BRANCO}                    {}
+	{VIRGULA}                   {return new Symbol(Sym.VIRGULA);}
+	{PONTO_VIRGULA}             {return new Symbol(Sym.PONTO_VIRGULA);}
+	{DOIS_PONTOS}               {return new Symbol(Sym.DOIS_PONTOS);}
 
 	{palavra_begin}             { return new Symbol(Sym.palavra_begin); }
 	{palavra_end}               { return new Symbol(Sym.palavra_end); }

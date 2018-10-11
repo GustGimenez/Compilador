@@ -5,9 +5,7 @@
         <group>
             <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/sintatico/sintatico.cup</file>
             <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/ui/IPrincipal.java</file>
-            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/Gerador.java</file>
-            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/LexicalAnalyzer.java</file>
-            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/Token.java</file>
+            <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/sintatico/Sym.java</file>
             <file>file:/home/gustavo/Documentos/Unesp/Compiladores/Compilador/src/lexico/language.lex</file>
         </group>
     </open-files>
