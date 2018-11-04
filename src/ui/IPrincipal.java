@@ -13,9 +13,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java_cup.runtime.DefaultSymbolFactory;
-import java_cup.runtime.Symbol;
-import java_cup.runtime.SymbolFactory;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +20,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import lexico.Token;
 import lexico.LexicalAnalyzer;
+import sintatico.AnalisadorSintatico;
 
 /**
  *
@@ -31,6 +29,7 @@ import lexico.LexicalAnalyzer;
 public class IPrincipal extends javax.swing.JFrame {
 
     private LexicalAnalyzer lexico;
+    private AnalisadorSintatico sintatico;
     private GerenciadorArquivos arqs;
     private TableCellRenderer colorir;
     private ArrayList<String> palavrasReservadas;
@@ -250,7 +249,16 @@ public class IPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_EditorTextoKeyReleased
 
     private void AnalisarSintaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalisarSintaticoActionPerformed
-        //pass
+        String entrada = this.EditorTexto.getText();
+        this.lexico = new LexicalAnalyzer(new StringReader(entrada));
+        this.sintatico = new AnalisadorSintatico();
+        
+        try {
+            this.lexico.yylex();
+            this.sintatico.analisePrograma(lexico);
+        } catch (IOException ex) {
+            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_AnalisarSintaticoActionPerformed
 
     private void populaTabelaTokens(ArrayList<Token> tokens) {
