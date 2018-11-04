@@ -2,9 +2,7 @@
 
 package lexico;
 
-import java_cup.runtime.Symbol;
-import jflex.sym;
-import sintatico.Sym;
+ import java.util.ArrayList; 
 
 
 /**
@@ -12,7 +10,7 @@ import sintatico.Sym;
  * <a href="http://www.jflex.de/">JFlex</a> 1.7.0
  * from the specification file <tt>src/lexico/language.lex</tt>
  */
-public class LexicalAnalyzer implements java_cup.runtime.Scanner {
+public class LexicalAnalyzer {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -295,25 +293,20 @@ public class LexicalAnalyzer implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
+    private ArrayList<Token> tokens;
 
-    public int getYyline() {
-        return yyline;
+     private void adicionarToken(String classificacao, String lexema, int linha, int coluna) {
+        this.tokens.add(new Token(classificacao, lexema, linha, coluna));
     }
 
-    public int getYycolumn() {
-        return yycolumn;
+    public LexicalAnalyzer(java.io.Reader in){
+        this.tokens = new ArrayList();
+        this.zzReader = in;
     }
 
-
-
-  /**
-   * Creates a new scanner
-   *
-   * @param   in  the java.io.Reader to read input from.
-   */
-  public LexicalAnalyzer(java.io.Reader in) {
-    this.zzReader = in;
-  }
+    public ArrayList getTokens(){
+        return this.tokens;
+    }
 
 
   /** 
@@ -530,25 +523,13 @@ public class LexicalAnalyzer implements java_cup.runtime.Scanner {
 
 
   /**
-   * Contains user EOF-code, which will be executed exactly once,
-   * when the end of file is reached
-   */
-  private void zzDoEOF() throws java.io.IOException {
-    if (!zzEOFDone) {
-      zzEOFDone = true;
-      yyclose();
-    }
-  }
-
-
-  /**
    * Resumes scanning until the next regular expression is matched,
    * the end of input is encountered or an I/O-Error occurs.
    *
    * @return      the next token
    * @exception   java.io.IOException  if any I/O-Error occurs
    */
-  public java_cup.runtime.Symbol next_token() throws java.io.IOException {
+  public void yylex() throws java.io.IOException {
     int zzInput;
     int zzAction;
 
@@ -684,13 +665,12 @@ public class LexicalAnalyzer implements java_cup.runtime.Scanner {
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
-            zzDoEOF();
-          { return new java_cup.runtime.Symbol(sym.EOF); }
+        return;
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { return new Symbol(Sym.DESCONHECIDO);
+            { adicionarToken("DESCONHECIDO", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 38: break;
@@ -700,177 +680,177 @@ public class LexicalAnalyzer implements java_cup.runtime.Scanner {
             // fall through
           case 39: break;
           case 3: 
-            { return new Symbol(Sym.FIM);
+            { adicionarToken("FIM", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 40: break;
           case 4: 
-            { return new Symbol(Sym.VIRGULA);
+            { adicionarToken("VIRGUL", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 41: break;
           case 5: 
-            { return new Symbol(Sym.PONTO_VIRGULA);
+            { adicionarToken("PONTO_VIRGULA", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 42: break;
           case 6: 
-            { return new Symbol(Sym.DOIS_PONTOS);
+            { adicionarToken("DOIS_PONTOS", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 43: break;
           case 7: 
-            { return new Symbol(Sym.NUM_INT);
+            { adicionarToken("NUM_INT", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 44: break;
           case 8: 
-            { return new Symbol(Sym.IDENTIFICADOR);
+            { adicionarToken("IDENTIFICADOR", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 45: break;
           case 9: 
-            { return new Symbol(Sym.OPSOMA);
+            { adicionarToken("OPSOMA", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 46: break;
           case 10: 
-            { return new Symbol(Sym.OPSUB);
+            { adicionarToken("OPSUB", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 47: break;
           case 11: 
-            { return new Symbol(Sym.OPMUL);
+            { adicionarToken("OPMUL", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 48: break;
           case 12: 
-            { return new Symbol(Sym.AP);
+            { adicionarToken("AP", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 49: break;
           case 13: 
-            { return new Symbol(Sym.FP);
+            { adicionarToken("FP", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 50: break;
           case 14: 
-            { return new Symbol(Sym.OP_MENOR);
+            { adicionarToken("OP_MENOR", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 51: break;
           case 15: 
-            { return new Symbol(Sym.OP_MAIOR);
+            { adicionarToken("OP_MAIOR", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 52: break;
           case 16: 
-            { return new Symbol(Sym.OP_ATRI);
+            { adicionarToken("OP_ATRI", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 53: break;
           case 17: 
-            { return new Symbol(Sym.palavra_do);
+            { adicionarToken("palavra_do", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 54: break;
           case 18: 
-            { return new Symbol(Sym.palavra_if);
+            { adicionarToken("palavra_if", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 55: break;
           case 19: 
-            { return new Symbol(Sym.OP_DIF);
+            { adicionarToken("OP_DIF", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 56: break;
           case 20: 
-            { return new Symbol(Sym.OP_MENOR_IGUAL);
+            { adicionarToken("OP_MENOR_IGUAL", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 57: break;
           case 21: 
-            { return new Symbol(Sym.OP_MAIOR_IGUAL);
+            { adicionarToken("OP_MAIOR_IGUAL", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 58: break;
           case 22: 
-            { return new Symbol(Sym.OP_IGUAL);
+            { adicionarToken("OP_IGUAL", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 59: break;
           case 23: 
-            { return new Symbol(Sym.palavra_or );
+            { adicionarToken("palavra_or", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 60: break;
           case 24: 
-            { return new Symbol(Sym.NUM_REAL);
+            { adicionarToken("NUM_REAL", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 61: break;
           case 25: 
-            { return new Symbol(Sym.OPDIV);
+            { adicionarToken("OPDIV", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 62: break;
           case 26: 
-            { return new Symbol(Sym.tipo_int);
+            { adicionarToken("tipo_int", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 63: break;
           case 27: 
-            { return new Symbol(Sym.palavra_var);
+            { adicionarToken("palavra_var", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 64: break;
           case 28: 
-            { return new Symbol(Sym.palavra_end);
+            { adicionarToken("palavra_end", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 65: break;
           case 29: 
-            { return new Symbol(Sym.palavra_not);
+            { adicionarToken("palavra_not", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 66: break;
           case 30: 
-            { return new Symbol(Sym.palavra_and);
+            { adicionarToken("palavra_and", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 67: break;
           case 31: 
-            { return new Symbol(Sym.palavra_else);
+            { adicionarToken("palavra_else", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 68: break;
           case 32: 
-            { return new Symbol(Sym.palavra_then);
+            { adicionarToken("palavra_then", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 69: break;
           case 33: 
-            { return new Symbol(Sym.palavra_begin);
+            { adicionarToken("palavra_begin", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 70: break;
           case 34: 
-            { return new Symbol(Sym.palavra_while);
+            { adicionarToken("palavra_while", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 71: break;
           case 35: 
-            { return new Symbol(Sym.tipo_boolean);
+            { adicionarToken("tipo_boolean", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 72: break;
           case 36: 
-            { return new Symbol(Sym.palavra_program);
+            { adicionarToken("palavra_program", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 73: break;
           case 37: 
-            { return new Symbol(Sym.palavra_procedure);
+            { adicionarToken("palavra_procedure", yytext(), yyline, yycolumn);
             } 
             // fall through
           case 74: break;

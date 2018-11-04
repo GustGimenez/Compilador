@@ -23,8 +23,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import lexico.Token;
 import lexico.LexicalAnalyzer;
-import sintatico.Parser;
-import sintatico.Sym;
 
 /**
  *
@@ -33,7 +31,6 @@ import sintatico.Sym;
 public class IPrincipal extends javax.swing.JFrame {
 
     private LexicalAnalyzer lexico;
-    private Parser sintatico;
     private GerenciadorArquivos arqs;
     private TableCellRenderer colorir;
     private ArrayList<String> palavrasReservadas;
@@ -86,49 +83,6 @@ public class IPrincipal extends javax.swing.JFrame {
         String[] palavras = texto.split(" ");
 
         return palavras[palavras.length - 1];
-    }
-
-    /**
-     * Retorna o texto do terminal de acordo com o código
-     *
-     * @return String
-     */
-    public String getTerminal(int sym) {
-        for (int i = 0; i < Sym.terminalNames.length; i++) {
-            if (sym == i) {
-                return Sym.terminalNames[i];
-            }
-        }
-        return "UNKNOWN";
-    }
-
-    /**
-     * Dada a entrada do usuário, passa pelo analisador léxico e formula o array
-     * de tokens para popular a tabela
-     *
-     * @return ArrayList<Token>
-     */
-    private ArrayList<Token> getTokens() {
-        try {
-            ArrayList<Token> tokens = new ArrayList();
-            //String classificacao, String lexema, int linha, int coluna
-            Symbol s = this.lexico.next_token();
-            while (s.sym != 0) {
-                Token token = new Token(this.getTerminal(s.sym),
-                        this.lexico.yytext(),
-                        this.lexico.getYyline() + 1,
-                        this.lexico.getYycolumn() + 1);
-                tokens.add(token);
-                s = this.lexico.next_token();
-            }
-            return tokens;
-            /**
-             * @param args the command line arguments
-             */
-        } catch (IOException ex) {
-            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
 
     /**
@@ -268,9 +222,13 @@ public class IPrincipal extends javax.swing.JFrame {
         String entrada = this.EditorTexto.getText();
         ArrayList<Token> tokens;
         this.lexico = new LexicalAnalyzer(new StringReader(entrada));
-
-        tokens = this.getTokens();
-        this.populaTabelaTokens(tokens);
+        try {
+            this.lexico.yylex();
+            tokens = this.lexico.getTokens();
+            this.populaTabelaTokens(tokens);
+        } catch (IOException ex) {
+            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_AnalisarLexicoActionPerformed
 
     private void AbrirArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirArquivoActionPerformed
@@ -292,16 +250,7 @@ public class IPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_EditorTextoKeyReleased
 
     private void AnalisarSintaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalisarSintaticoActionPerformed
-        SymbolFactory sf = new DefaultSymbolFactory();
-        String entrada = this.EditorTexto.getText();
-        this.lexico = new LexicalAnalyzer((new StringReader(entrada)));
-        
-        this.sintatico = new Parser(lexico, sf);
-        try {
-            this.sintatico.debug_parse();
-        } catch (Exception ex) {
-            Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //pass
     }//GEN-LAST:event_AnalisarSintaticoActionPerformed
 
     private void populaTabelaTokens(ArrayList<Token> tokens) {

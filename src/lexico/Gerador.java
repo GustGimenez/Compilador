@@ -11,12 +11,10 @@ import java.nio.file.Paths;
 public class Gerador {
 
     public static void main(String[] args) {
-
         String file = "src/lexico/language.lex";
 
         File sourceCode = new File(file);
 
         jflex.Main.generate(sourceCode);
-
     }
 }
