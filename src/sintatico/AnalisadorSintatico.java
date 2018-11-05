@@ -65,23 +65,23 @@ public class AnalisadorSintatico {
         Token t = lex.getNextToken();
 
         while (t.getClassificacao().equals("tipo_boolean")
-                || t.getClassificacao().equals("tipo_int")){
+                || t.getClassificacao().equals("tipo_int")) {
             System.out.println("Lido " + t.getClassificacao() + " " + t.getLexema());
             this.analiseParteDeclaracoesVariaveis(lex);
             t = lex.getNextToken();
         }
-        
-//        while (t.getClassificacao().equals("palavra_procedure")){
-//            this.analiseParteDeclaracoesSubrotinas(lex);
-//            t = lex.getNextToken();
-//        }
+
+        while (t.getClassificacao().equals("palavra_procedure")) {
+            this.analiseParteDeclaracoesSubrotinas(lex);
+            t = lex.getNextToken();
+        }
 //
 //        this.analiseComandoComposto(lex);
     }
 
     private void analiseParteDeclaracoesVariaveis(LexicalAnalyzer lex) {
         Token t;
-        
+
         while (true) {
             t = lex.getNextToken();
             if (t.getClassificacao().equals("IDENTIFICADOR")) {
@@ -102,11 +102,121 @@ public class AnalisadorSintatico {
     }
 
     private void analiseParteDeclaracoesSubrotinas(LexicalAnalyzer lex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Token t;
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("IDENTIFICADOR")) {
+            this.erro(t, "IDENTIFICADOR");
+        } else {
+            System.out.println("Lido IDENTIFICADOR " + t.getLexema());
+        }
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("AP")) {
+            this.erro(t, "AP");
+        } else {
+            System.out.println("Lido AP");
+            this.analiseParametrosFormais(lex);
+        }
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
+            this.erro(t, "PONTO_VIRGULA");
+        } else {
+            System.out.println("Lido PONTO_VIRGULA");
+            this.analiseBlocoSubrotina(lex);
+        }
     }
 
     private void analiseComandoComposto(LexicalAnalyzer lex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Token t;
+        
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("palavra_begin")) {
+            this.erro(t, "palavra_begin");
+        } else {
+            System.out.println("Lido palara_begin");
+        }
+        
+        this.analiseComando(lex);
+    
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("palavra_end")) {
+            this.erro(t, "palavra_end");
+        } else {
+            System.out.println("Lido palavra_end");
+        }
+    }
+
+    private void analiseParametrosFormais(LexicalAnalyzer lex) {
+        Token t;
+
+        while (true) {
+            t = lex.getNextToken();
+            if (!t.getClassificacao().equals("palavra_var")) {
+                this.erro(t, "palavra_var");
+            } else {
+                System.out.println("Lido palavra_var");
+            }
+
+            this.analiseListaIdentificadores(lex);
+            
+            t = lex.getNextToken();
+            if (!t.getClassificacao().equals("tipo_int")
+                && !t.getClassificacao().equals("tipo_boolean")) {
+                this.erro(t, "tipo_int/tipo_boolean");
+            } else {
+                System.out.println("Lido " + t.getClassificacao());
+            }
+            
+            t = lex.getNextToken();
+            if (t.getClassificacao().equals("FP")) {
+                return;
+            } else if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
+                this.erro(t, "PONTO_VIRGULA");
+                return;
+            }
+        }
+    }
+
+    private void analiseListaIdentificadores(LexicalAnalyzer lex) {
+        Token t;
+
+        while (true) {
+            t = lex.getNextToken();
+            if (!t.getClassificacao().equals("IDENTIFICADOR")) {
+                this.erro(t, "IDENTIFICADOR");
+            } else {
+                System.out.println("Lido IDENTIFICADOR " + t.getLexema());
+            }
+            
+            t = lex.getNextToken();
+            if (t.getClassificacao().equals("VIRGULA")) {
+                continue;
+            } else if (t.getClassificacao().equals("DOIS_PONTOS")) {
+                return;
+            } else {
+                this.erro(t, "VIRGULA/DOIS_PONTOS");
+                return;
+            }
+        }
+    }
+
+    private void analiseBlocoSubrotina(LexicalAnalyzer lex) {
+        Token t = lex.getNextToken();
+
+        while (t.getClassificacao().equals("tipo_boolean")
+                || t.getClassificacao().equals("tipo_int")) {
+            System.out.println("Lido " + t.getClassificacao() + " " + t.getLexema());
+            this.analiseParteDeclaracoesVariaveis(lex);
+            t = lex.getNextToken();
+        }
+
+        this.analiseComandoComposto(lex);
+    }
+
+    private void analiseComando(LexicalAnalyzer lex) {
+        
     }
 
 }
