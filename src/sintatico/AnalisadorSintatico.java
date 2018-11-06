@@ -25,7 +25,6 @@ public class AnalisadorSintatico {
                 + t.getLexema() + " encontrado \n"
                 + "\t -> Linha: " + t.getLinha() + ", Coluna: "
                 + t.getColunaInicial());
-
     }
 
     public void analisePrograma(LexicalAnalyzer lex) {
@@ -75,8 +74,8 @@ public class AnalisadorSintatico {
             this.analiseParteDeclaracoesSubrotinas(lex);
             t = lex.getNextToken();
         }
-//
-//        this.analiseComandoComposto(lex);
+
+        this.analiseComandoComposto(lex);
     }
 
     private void analiseParteDeclaracoesVariaveis(LexicalAnalyzer lex) {
@@ -130,16 +129,16 @@ public class AnalisadorSintatico {
 
     private void analiseComandoComposto(LexicalAnalyzer lex) {
         Token t;
-        
+
         t = lex.getNextToken();
         if (!t.getClassificacao().equals("palavra_begin")) {
             this.erro(t, "palavra_begin");
         } else {
             System.out.println("Lido palara_begin");
         }
-        
+
         this.analiseComando(lex);
-    
+
         t = lex.getNextToken();
         if (!t.getClassificacao().equals("palavra_end")) {
             this.erro(t, "palavra_end");
@@ -160,15 +159,15 @@ public class AnalisadorSintatico {
             }
 
             this.analiseListaIdentificadores(lex);
-            
+
             t = lex.getNextToken();
             if (!t.getClassificacao().equals("tipo_int")
-                && !t.getClassificacao().equals("tipo_boolean")) {
+                    && !t.getClassificacao().equals("tipo_boolean")) {
                 this.erro(t, "tipo_int/tipo_boolean");
             } else {
                 System.out.println("Lido " + t.getClassificacao());
             }
-            
+
             t = lex.getNextToken();
             if (t.getClassificacao().equals("FP")) {
                 return;
@@ -189,7 +188,7 @@ public class AnalisadorSintatico {
             } else {
                 System.out.println("Lido IDENTIFICADOR " + t.getLexema());
             }
-            
+
             t = lex.getNextToken();
             if (t.getClassificacao().equals("VIRGULA")) {
                 continue;
@@ -212,11 +211,123 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
         }
 
-        this.analiseComandoComposto(lex);
+        if (!t.getClassificacao().equals("palavra_begin")) {
+            this.erro(t, "palavra_begin");
+        } else {
+            System.out.println("Lido palavra_begin");
+            this.analiseComandoComposto(lex);
+        }
+
     }
 
     private void analiseComando(LexicalAnalyzer lex) {
+        Token t = lex.getNextToken();
+        Token aux;
+
+        switch (t.getClassificacao()) {
+            case "IDENTIFICADOR":
+                aux = lex.getNextToken();
+                if (aux.getClassificacao().equals("OP_ATRI")) { // Atribuição
+                    this.analiseExpressao(lex);
+                } else { // Chamada de Procedimento
+                    this.analiseChamadaProcedimento(lex);
+                }
+                break;
+                
+            case "palavra_begin":
+                // Comando Composto
+                this.analiseComandoComposto(lex);
+                break;
+                
+            case "palavra_if":
+                // Comando Condicional
+                this.comandoCondicional(lex);
+                break;
+                
+            case "palavra_while":
+                // Comando Repetitivo
+                this.comandoRepetitivo(lex);
+                break;
+        }
+    }
+
+    private void analiseExpressao(LexicalAnalyzer lex) {
+        this.analiseExpressaoSimples(lex);
+    }
+
+    private void comandoCondicional(LexicalAnalyzer lex) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void comandoRepetitivo(LexicalAnalyzer lex) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void analiseChamadaProcedimento(LexicalAnalyzer lex) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void analiseExpressaoSimples(LexicalAnalyzer lex) {
+        Token t = lex.getNextToken();
+        if (t.getClassificacao().equals("OPSOMA")
+           || t.getClassificacao().equals("OPSUB")
+           || t.getClassificacao().equals("palavra_or")) {
+            System.out.println("Lido " + t.getClassificacao());
+        }
         
+        this.analiseTermo(lex);
+        
+        t = lex.getNextToken();
+        switch (t.getClassificacao()) {
+            case "OP_MENOR":
+            case "OP_MAIOR":
+            case "OP_MENOR_IGUAL":
+            case "OP_MAIOR_IGUAL":
+            case "OP_IGUAL":
+            case "OP_DIF":
+                lex.rewindTokenCounter();
+                this.analiseExpressaoSimples(lex);
+                break;
+        }
+    }
+
+    private void analiseTermo(LexicalAnalyzer lex) {
+        Token t;
+        do {
+            this.analiseFator(lex);
+            t = lex.getNextToken();
+        } while (t.getClassificacao().equals("OPDIV")
+                || t.getClassificacao().equals("OPMUL")
+                || t.getClassificacao().equals("palavra_and"));
+        
+        lex.rewindTokenCounter();
+    }
+
+    private void analiseFator(LexicalAnalyzer lex) {
+        Token t = lex.getNextToken();
+        
+        switch (t.getClassificacao()) {
+            case "IDENTIFICADOR":
+                System.out.println("Lido IDENTIFICADOR " + t.getLexema());
+                break;
+                
+            case "NUM_INT":
+                System.out.println("Lido NUM_INT " + t.getLexema());
+                break;
+                
+            case "NUM_REAL":
+                System.out.println("Lido NUM_REAL " + t.getLexema());
+                break;
+                
+            case "AP":
+                this.analiseExpressao(lex);
+                break;
+                
+            case "palavra_not":
+                System.out.println("Lido palavra_not");
+                this.analiseFator(lex);
+                break;
+        }
     }
 
 }

@@ -951,4 +951,20 @@ public class LexicalAnalyzer {
         return this.tokens.get(this.nextToken++);
     }
 
+    /**
+     * Decrementa o contador dos tokens
+     */
+    public void rewindTokenCounter() {
+        this.nextToken--;
+    }
+
+    /**
+     * Informa se ainda há tokens a serem lidos pelo analisador sintático
+     * 
+     * @return boolean
+     */
+    public boolean hasNextToken() {
+        return this.nextToken < this.tokens.size();
+    }
+
 }

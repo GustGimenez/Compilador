@@ -255,7 +255,7 @@ public class IPrincipal extends javax.swing.JFrame {
         
         try {
             this.lexico.yylex();
-            this.sintatico.analisePrograma(lexico);
+            this.sintatico.analiseExpressaoSimples(lexico);
         } catch (IOException ex) {
             Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
