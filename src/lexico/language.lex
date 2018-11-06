@@ -78,7 +78,7 @@ IDENTIFICADOR = {LETRA}({LETRA}|{DIGITO})*
 <YYINITIAL> {
 
 	{BRANCO}                    {}
-	{VIRGULA}                   {adicionarToken("VIRGUL", yytext(), yyline, yycolumn);}
+	{VIRGULA}                   {adicionarToken("VIRGULA", yytext(), yyline, yycolumn);}
 	{PONTO_VIRGULA}             {adicionarToken("PONTO_VIRGULA", yytext(), yyline, yycolumn);}
 	{DOIS_PONTOS}               {adicionarToken("DOIS_PONTOS", yytext(), yyline, yycolumn);}
 

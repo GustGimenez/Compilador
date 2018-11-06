@@ -732,7 +732,7 @@ public class LexicalAnalyzer {
                     case 40:
                         break;
                     case 4: {
-                        adicionarToken("VIRGUL", yytext(), yyline, yycolumn);
+                        adicionarToken("VIRGULA", yytext(), yyline, yycolumn);
                     }
                     // fall through
                     case 41:

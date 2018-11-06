@@ -111,11 +111,11 @@ public class AnalisadorSintatico {
         }
 
         t = lex.getNextToken();
-        if (!t.getClassificacao().equals("AP")) {
-            this.erro(t, "AP");
-        } else {
+        if (t.getClassificacao().equals("AP")) {
             System.out.println("Lido AP");
             this.analiseParametrosFormais(lex);
+        } else {
+            lex.rewindTokenCounter();
         }
 
         t = lex.getNextToken();
@@ -136,9 +136,13 @@ public class AnalisadorSintatico {
         } else {
             System.out.println("Lido palara_begin");
         }
-
-        this.analiseComando(lex);
-
+        
+        do{
+            this.analiseComando(lex);
+            t = lex.getNextToken();
+        } while(t.getClassificacao().equals("PONTO_VIRGULA"));
+        
+        lex.rewindTokenCounter();
         t = lex.getNextToken();
         if (!t.getClassificacao().equals("palavra_end")) {
             this.erro(t, "palavra_end");
@@ -215,6 +219,7 @@ public class AnalisadorSintatico {
             this.erro(t, "palavra_begin");
         } else {
             System.out.println("Lido palavra_begin");
+            lex.rewindTokenCounter();
             this.analiseComandoComposto(lex);
         }
 
@@ -226,8 +231,10 @@ public class AnalisadorSintatico {
 
         switch (t.getClassificacao()) {
             case "IDENTIFICADOR":
+                System.out.println("Lido IDENTIFICADOR " + t.getLexema());
                 aux = lex.getNextToken();
                 if (aux.getClassificacao().equals("OP_ATRI")) { // Atribuição
+                    System.out.println("Lido OP_ATRI");
                     this.analiseExpressao(lex);
                 } else { // Chamada de Procedimento
                     this.analiseChamadaProcedimento(lex);
@@ -275,6 +282,7 @@ public class AnalisadorSintatico {
             System.out.println("Lido " + t.getClassificacao());
         }
         
+        lex.rewindTokenCounter();
         this.analiseTermo(lex);
         
         t = lex.getNextToken();
@@ -287,6 +295,10 @@ public class AnalisadorSintatico {
             case "OP_DIF":
                 lex.rewindTokenCounter();
                 this.analiseExpressaoSimples(lex);
+                break;
+                
+            default:
+                lex.rewindTokenCounter();
                 break;
         }
     }
