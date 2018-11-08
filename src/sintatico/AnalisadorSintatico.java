@@ -125,6 +125,14 @@ public class AnalisadorSintatico {
             System.out.println("Lido PONTO_VIRGULA");
             this.analiseBlocoSubrotina(lex);
         }
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
+            this.erro(t, "PONTO_VIRGULA");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido PONTO_VIRGULA");
+        }
     }
 
     private void analiseComandoComposto(LexicalAnalyzer lex) {
@@ -136,12 +144,12 @@ public class AnalisadorSintatico {
         } else {
             System.out.println("Lido palara_begin");
         }
-        
-        do{
+
+        do {
             this.analiseComando(lex);
             t = lex.getNextToken();
-        } while(t.getClassificacao().equals("PONTO_VIRGULA"));
-        
+        } while (t.getClassificacao().equals("PONTO_VIRGULA"));
+
         lex.rewindTokenCounter();
         t = lex.getNextToken();
         if (!t.getClassificacao().equals("palavra_end")) {
@@ -222,7 +230,6 @@ public class AnalisadorSintatico {
             lex.rewindTokenCounter();
             this.analiseComandoComposto(lex);
         }
-
     }
 
     private void analiseComando(LexicalAnalyzer lex) {
@@ -237,23 +244,32 @@ public class AnalisadorSintatico {
                     System.out.println("Lido OP_ATRI");
                     this.analiseExpressao(lex);
                 } else { // Chamada de Procedimento
+                    lex.rewindTokenCounter();
+                    lex.rewindTokenCounter();
                     this.analiseChamadaProcedimento(lex);
                 }
                 break;
-                
+
             case "palavra_begin":
                 // Comando Composto
+                lex.rewindTokenCounter();
                 this.analiseComandoComposto(lex);
                 break;
-                
+
             case "palavra_if":
                 // Comando Condicional
+                lex.rewindTokenCounter();
                 this.comandoCondicional(lex);
                 break;
-                
+
             case "palavra_while":
                 // Comando Repetitivo
+                lex.rewindTokenCounter();
                 this.comandoRepetitivo(lex);
+                break;
+
+            default:
+                lex.rewindTokenCounter();
                 break;
         }
     }
@@ -263,28 +279,132 @@ public class AnalisadorSintatico {
     }
 
     private void comandoCondicional(LexicalAnalyzer lex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Token t = lex.getNextToken();
+        if (!t.getClassificacao().equals("palavra_if")) {
+            this.erro(t, "palavra_if");
+            lex.rewindTokenCounter();
+        }
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("AP")) {
+            this.erro(t, "AP");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido AP");
+        }
+
+        this.analiseExpressao(lex);
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("FP")) {
+            this.erro(t, "FP");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido FP");
+        }
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("palavra_then")) {
+            this.erro(t, "palavra_then");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido palavra_then");
+        }
+
+        do {
+            this.analiseComando(lex);
+            t = lex.getNextToken();
+        } while (t.getClassificacao().equals("PONTO_VIRGULA"));
+
+        lex.rewindTokenCounter();
+        t = lex.getNextToken();
+        if (t.getClassificacao().equals("palavra_else")) {
+            System.out.println("Lido palavra_else");
+            do {
+                this.analiseComando(lex);
+                t = lex.getNextToken();
+            } while (t.getClassificacao().equals("PONTO_VIRGULA"));
+        } else {
+            lex.rewindTokenCounter();
+        }
     }
 
     private void comandoRepetitivo(LexicalAnalyzer lex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Token t = lex.getNextToken();
+        if (!t.getClassificacao().equals("palavra_while")) {
+            this.erro(t, "palavra_while");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido palavra_while");
+        }
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("AP")) {
+            this.erro(t, "AP");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido AP");
+        }
+
+        this.analiseExpressao(lex);
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("FP")) {
+            this.erro(t, "FP");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido FP");
+        }
+
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("palavra_do")) {
+            this.erro(t, "palavra_do");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido palavra_do");
+        }
+
+        this.analiseComando(lex);
     }
 
     private void analiseChamadaProcedimento(LexicalAnalyzer lex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Token t = lex.getNextToken();
+
+        if (!t.getClassificacao().equals("IDENTIFICADOR")) {
+            this.erro(t, "IDENTIFICADOR");
+            lex.rewindTokenCounter();
+        } else {
+            System.out.println("Lido IDENTIFICADOR " + t.getLexema());
+        }
+
+        t = lex.getNextToken();
+        if (t.getClassificacao().equals("AP")) {
+            System.out.println("Lido AP");
+            this.analiseListaExpressoes(lex);
+
+            t = lex.getNextToken();
+            if (!t.getClassificacao().equals(("FP"))) {
+                this.erro(t, "FP");
+            }
+        } else {
+            if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
+                this.erro(t, "PONTO_VIRGULA");
+                lex.rewindTokenCounter();
+            }
+        }
     }
 
     public void analiseExpressaoSimples(LexicalAnalyzer lex) {
         Token t = lex.getNextToken();
         if (t.getClassificacao().equals("OPSOMA")
-           || t.getClassificacao().equals("OPSUB")
-           || t.getClassificacao().equals("palavra_or")) {
+                || t.getClassificacao().equals("OPSUB")
+                || t.getClassificacao().equals("palavra_or")) {
             System.out.println("Lido " + t.getClassificacao());
         }
-        
+
         lex.rewindTokenCounter();
         this.analiseTermo(lex);
-        
+
         t = lex.getNextToken();
         switch (t.getClassificacao()) {
             case "OP_MENOR":
@@ -293,10 +413,9 @@ public class AnalisadorSintatico {
             case "OP_MAIOR_IGUAL":
             case "OP_IGUAL":
             case "OP_DIF":
-                lex.rewindTokenCounter();
                 this.analiseExpressaoSimples(lex);
                 break;
-                
+
             default:
                 lex.rewindTokenCounter();
                 break;
@@ -311,34 +430,46 @@ public class AnalisadorSintatico {
         } while (t.getClassificacao().equals("OPDIV")
                 || t.getClassificacao().equals("OPMUL")
                 || t.getClassificacao().equals("palavra_and"));
-        
+
         lex.rewindTokenCounter();
     }
 
     private void analiseFator(LexicalAnalyzer lex) {
         Token t = lex.getNextToken();
-        
+
         switch (t.getClassificacao()) {
             case "IDENTIFICADOR":
                 System.out.println("Lido IDENTIFICADOR " + t.getLexema());
                 break;
-                
+
             case "NUM_INT":
                 System.out.println("Lido NUM_INT " + t.getLexema());
                 break;
-                
+
             case "NUM_REAL":
                 System.out.println("Lido NUM_REAL " + t.getLexema());
                 break;
-                
+
             case "AP":
                 this.analiseExpressao(lex);
                 break;
-                
+
             case "palavra_not":
                 System.out.println("Lido palavra_not");
                 this.analiseFator(lex);
                 break;
+        }
+    }
+
+    private void analiseListaExpressoes(LexicalAnalyzer lex) {
+        this.analiseExpressao(lex);
+
+        Token t = lex.getNextToken();
+        if (t.getClassificacao().equals("VIRGULA")) {
+            System.out.println("Lido VIRGULA");
+            this.analiseListaExpressoes(lex);
+        } else {
+            lex.rewindTokenCounter();
         }
     }
 
