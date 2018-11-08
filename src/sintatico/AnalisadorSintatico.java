@@ -324,6 +324,7 @@ public class AnalisadorSintatico {
                 this.analiseComando(lex);
                 t = lex.getNextToken();
             } while (t.getClassificacao().equals("PONTO_VIRGULA"));
+            lex.rewindTokenCounter();
         } else {
             lex.rewindTokenCounter();
         }
@@ -364,7 +365,11 @@ public class AnalisadorSintatico {
             System.out.println("Lido palavra_do");
         }
 
-        this.analiseComando(lex);
+        do {
+            this.analiseComando(lex);
+            t = lex.getNextToken();
+        } while (t.getClassificacao().equals("PONTO_VIRGULA"));
+        lex.rewindTokenCounter();
     }
 
     private void analiseChamadaProcedimento(LexicalAnalyzer lex) {
