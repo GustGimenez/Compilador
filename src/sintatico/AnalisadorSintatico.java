@@ -52,12 +52,12 @@ public class AnalisadorSintatico {
 
         this.analiseBloco(lex);
 
-//        t = lex.getNextToken();
-//        if (!t.getClassificacao().equals("FIM")) {
-//            this.erro(t, "FIM");
-//        } else {
-//            System.out.println("Fim do programa");
-//        }
+        t = lex.getNextToken();
+        if (!t.getClassificacao().equals("FIM")) {
+            this.erro(t, "FIM");
+        } else {
+            System.out.println("Fim do programa");
+        }
     }
 
     private void analiseBloco(LexicalAnalyzer lex) {
@@ -75,6 +75,7 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
         }
 
+        lex.rewindTokenCounter();
         this.analiseComandoComposto(lex);
     }
 
@@ -142,7 +143,7 @@ public class AnalisadorSintatico {
         if (!t.getClassificacao().equals("palavra_begin")) {
             this.erro(t, "palavra_begin");
         } else {
-            System.out.println("Lido palara_begin");
+            System.out.println("Lido palavra_begin");
         }
 
         do {
@@ -247,6 +248,25 @@ public class AnalisadorSintatico {
                     lex.rewindTokenCounter();
                     lex.rewindTokenCounter();
                     this.analiseChamadaProcedimento(lex);
+                }
+                break;
+                
+            case "palavra_write":
+            case "palavra_read":
+                System.out.println("Lido " + t.getClassificacao());
+                t = lex.getNextToken();
+                if (t.getClassificacao().equals("AP")) {
+                    System.out.println("Lido AP");
+                    this.analiseListaExpressoes(lex);
+                    
+                    t = lex.getNextToken();
+                    if (t.getClassificacao().equals("FP")) {
+                        System.out.println("Lido FP");
+                    } else {
+                        this.erro(t, "FP");
+                    }
+                } else {
+                    this.erro(t, "AP");
                 }
                 break;
 
@@ -408,8 +428,14 @@ public class AnalisadorSintatico {
         }
 
         lex.rewindTokenCounter();
-        this.analiseTermo(lex);
+        do {
+            this.analiseTermo(lex);
+            t = lex.getNextToken();
+        } while (t.getClassificacao().equals("OPSOMA")
+                || t.getClassificacao().equals("OPSUB")
+                || t.getClassificacao().equals("palavra_or"));
 
+        lex.rewindTokenCounter();
         t = lex.getNextToken();
         switch (t.getClassificacao()) {
             case "OP_MENOR":
@@ -462,6 +488,14 @@ public class AnalisadorSintatico {
             case "palavra_not":
                 System.out.println("Lido palavra_not");
                 this.analiseFator(lex);
+                break;
+                
+            case "palavra_true":
+                System.out.println("Lido palavra_true");
+                break;
+                
+            case "palavra_false":
+                System.out.println("Lido palavra_false");
                 break;
         }
     }

@@ -45,10 +45,10 @@ public class LexicalAnalyzer {
     private static final String ZZ_CMAP_PACKED
             = "\11\0\1\1\1\1\1\45\1\45\1\1\22\0\1\1\7\0\1\17"
             + "\1\20\1\13\1\11\1\3\1\12\1\2\1\0\1\6\11\6\1\5"
-            + "\1\4\1\21\1\23\1\22\2\0\32\7\4\0\1\7\1\0\1\37"
-            + "\1\24\1\42\1\14\1\25\1\30\1\26\1\32\1\15\2\7\1\33"
-            + "\1\44\1\27\1\35\1\41\1\7\1\40\1\34\1\31\1\43\1\16"
-            + "\1\36\3\7\1\0\1\10\10\0\1\45\u1fa2\0\1\45\1\45\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+            + "\1\4\1\21\1\23\1\22\2\0\32\7\4\0\1\7\1\0\1\31"
+            + "\1\35\1\43\1\14\1\27\1\30\1\36\1\40\1\15\2\7\1\32"
+            + "\1\44\1\37\1\41\1\42\1\7\1\25\1\33\1\24\1\26\1\16"
+            + "\1\34\3\7\1\0\1\10\10\0\1\45\u1fa2\0\1\45\1\45\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
     /**
      * Translates characters to character classes
@@ -63,14 +63,15 @@ public class LexicalAnalyzer {
     private static final String ZZ_ACTION_PACKED_0
             = "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"
             + "\1\10\1\2\1\11\1\12\1\13\3\10\1\14\1\15"
-            + "\1\16\1\17\1\1\10\10\1\20\1\0\1\10\1\21"
-            + "\1\10\1\22\1\10\1\23\1\24\1\25\1\26\6\10"
-            + "\1\27\3\10\1\30\1\31\1\32\1\33\2\10\1\34"
-            + "\1\10\1\35\2\10\1\36\3\10\1\37\1\40\3\10"
-            + "\1\41\1\10\1\42\5\10\1\43\1\44\2\10\1\45";
+            + "\1\16\1\17\1\1\12\10\1\20\1\0\1\10\1\21"
+            + "\1\22\2\10\1\23\1\24\1\25\1\26\14\10\1\27"
+            + "\1\10\1\30\1\31\1\32\1\33\4\10\1\34\1\10"
+            + "\1\35\4\10\1\36\1\10\1\37\1\40\1\41\1\42"
+            + "\7\10\1\43\1\44\1\45\1\46\6\10\1\47\1\50"
+            + "\2\10\1\51";
 
     private static int[] zzUnpackAction() {
-        int[] result = new int[83];
+        int[] result = new int[99];
         int offset = 0;
         offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
         return result;
@@ -101,17 +102,19 @@ public class LexicalAnalyzer {
             = "\0\0\0\46\0\46\0\46\0\46\0\46\0\114\0\162"
             + "\0\230\0\230\0\46\0\46\0\46\0\276\0\344\0\u010a"
             + "\0\46\0\46\0\u0130\0\u0156\0\u017c\0\u01a2\0\u01c8\0\u01ee"
-            + "\0\u0214\0\u023a\0\u0260\0\u0286\0\u02ac\0\46\0\u02d2\0\u02f8"
-            + "\0\230\0\u031e\0\230\0\u0344\0\46\0\46\0\46\0\46"
-            + "\0\u036a\0\u0390\0\u03b6\0\u03dc\0\u0402\0\u0428\0\230\0\u044e"
-            + "\0\u0474\0\u049a\0\u02d2\0\230\0\230\0\230\0\u04c0\0\u04e6"
-            + "\0\230\0\u050c\0\230\0\u0532\0\u0558\0\230\0\u057e\0\u05a4"
-            + "\0\u05ca\0\230\0\230\0\u05f0\0\u0616\0\u063c\0\230\0\u0662"
-            + "\0\230\0\u0688\0\u06ae\0\u06d4\0\u06fa\0\u0720\0\230\0\230"
-            + "\0\u0746\0\u076c\0\230";
+            + "\0\u0214\0\u023a\0\u0260\0\u0286\0\u02ac\0\u02d2\0\u02f8\0\46"
+            + "\0\u031e\0\u0344\0\230\0\230\0\u036a\0\u0390\0\46\0\46"
+            + "\0\46\0\46\0\u03b6\0\u03dc\0\u0402\0\u0428\0\u044e\0\u0474"
+            + "\0\u049a\0\u04c0\0\u04e6\0\u050c\0\u0532\0\u0558\0\230\0\u057e"
+            + "\0\u031e\0\230\0\230\0\230\0\u05a4\0\u05ca\0\u05f0\0\u0616"
+            + "\0\230\0\u063c\0\230\0\u0662\0\u0688\0\u06ae\0\u06d4\0\230"
+            + "\0\u06fa\0\230\0\230\0\230\0\230\0\u0720\0\u0746\0\u076c"
+            + "\0\u0792\0\u07b8\0\u07de\0\u0804\0\230\0\230\0\230\0\230"
+            + "\0\u082a\0\u0850\0\u0876\0\u089c\0\u08c2\0\u08e8\0\230\0\230"
+            + "\0\u090e\0\u0934\0\230";
 
     private static int[] zzUnpackRowMap() {
-        int[] result = new int[83];
+        int[] result = new int[99];
         int offset = 0;
         offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
         return result;
@@ -139,56 +142,68 @@ public class LexicalAnalyzer {
             = "\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11"
             + "\1\12\1\13\1\14\1\15\1\16\1\17\1\20\1\21"
             + "\1\22\1\23\1\24\1\25\1\26\1\27\1\11\1\30"
-            + "\1\11\1\31\3\11\1\32\1\33\1\34\1\11\1\35"
-            + "\3\11\72\0\1\36\24\0\1\37\3\0\1\10\45\0"
-            + "\3\11\3\0\3\11\5\0\21\11\7\0\3\11\3\0"
-            + "\1\11\1\40\1\11\5\0\11\11\1\41\7\11\7\0"
-            + "\3\11\3\0\3\11\5\0\3\11\1\42\1\43\14\11"
-            + "\7\0\3\11\3\0\3\11\5\0\13\11\1\44\5\11"
-            + "\23\0\1\45\1\46\45\0\1\47\45\0\1\50\30\0"
-            + "\3\11\3\0\3\11\5\0\1\11\1\51\7\11\1\52"
-            + "\7\11\7\0\3\11\3\0\3\11\5\0\3\11\1\53"
-            + "\3\11\1\54\11\11\7\0\3\11\3\0\3\11\5\0"
-            + "\11\11\1\55\7\11\7\0\3\11\3\0\3\11\5\0"
-            + "\6\11\1\56\12\11\7\0\3\11\3\0\3\11\5\0"
-            + "\14\11\1\57\4\11\7\0\3\11\3\0\3\11\5\0"
-            + "\6\11\1\60\12\11\7\0\3\11\3\0\3\11\5\0"
-            + "\3\11\1\61\15\11\7\0\3\11\3\0\3\11\5\0"
-            + "\14\11\1\62\4\11\7\0\1\63\45\0\3\11\3\0"
-            + "\2\11\1\64\5\0\21\11\7\0\3\11\3\0\3\11"
-            + "\5\0\5\11\1\65\13\11\7\0\3\11\3\0\3\11"
-            + "\5\0\14\11\1\66\4\11\7\0\3\11\3\0\3\11"
-            + "\5\0\2\11\1\67\16\11\7\0\3\11\3\0\3\11"
-            + "\5\0\11\11\1\70\7\11\7\0\3\11\3\0\1\71"
-            + "\2\11\5\0\21\11\7\0\3\11\3\0\3\11\5\0"
-            + "\10\11\1\72\10\11\7\0\3\11\3\0\3\11\5\0"
-            + "\5\11\1\73\13\11\7\0\3\11\3\0\3\11\5\0"
-            + "\1\11\1\74\17\11\7\0\3\11\3\0\1\11\1\75"
-            + "\1\11\5\0\21\11\7\0\3\11\3\0\1\76\2\11"
-            + "\5\0\21\11\7\0\3\11\3\0\3\11\5\0\11\11"
-            + "\1\77\7\11\7\0\3\11\3\0\1\11\1\100\1\11"
-            + "\5\0\21\11\7\0\3\11\3\0\3\11\5\0\7\11"
-            + "\1\101\11\11\7\0\3\11\3\0\3\11\5\0\1\11"
-            + "\1\102\17\11\7\0\3\11\3\0\3\11\5\0\3\11"
-            + "\1\103\15\11\7\0\3\11\3\0\3\11\5\0\7\11"
-            + "\1\104\11\11\7\0\3\11\3\0\3\11\5\0\2\11"
-            + "\1\105\13\11\1\106\2\11\7\0\3\11\3\0\3\11"
-            + "\5\0\3\11\1\107\15\11\7\0\3\11\3\0\3\11"
-            + "\5\0\1\11\1\110\17\11\7\0\3\11\3\0\3\11"
-            + "\5\0\1\11\1\111\17\11\7\0\3\11\3\0\3\11"
-            + "\5\0\14\11\1\112\4\11\7\0\3\11\3\0\3\11"
-            + "\5\0\1\11\1\113\17\11\7\0\3\11\3\0\3\11"
-            + "\5\0\13\11\1\114\5\11\7\0\3\11\3\0\3\11"
-            + "\5\0\13\11\1\115\5\11\7\0\3\11\3\0\1\116"
-            + "\2\11\5\0\21\11\7\0\3\11\3\0\3\11\5\0"
-            + "\3\11\1\117\15\11\7\0\3\11\3\0\3\11\5\0"
-            + "\20\11\1\120\7\0\3\11\3\0\3\11\5\0\17\11"
-            + "\1\121\1\11\7\0\3\11\3\0\3\11\5\0\14\11"
-            + "\1\122\4\11\7\0\3\11\3\0\3\11\5\0\1\11"
-            + "\1\123\17\11\1\0";
+            + "\1\31\1\32\2\11\1\33\1\34\1\11\1\35\1\11"
+            + "\1\36\1\37\2\11\72\0\1\40\24\0\1\41\3\0"
+            + "\1\10\45\0\3\11\3\0\3\11\5\0\21\11\7\0"
+            + "\3\11\3\0\1\11\1\42\1\11\5\0\15\11\1\43"
+            + "\3\11\7\0\3\11\3\0\3\11\5\0\4\11\1\44"
+            + "\6\11\1\45\5\11\7\0\3\11\3\0\3\11\5\0"
+            + "\5\11\1\46\13\11\23\0\1\47\1\50\45\0\1\51"
+            + "\45\0\1\52\30\0\3\11\3\0\3\11\5\0\1\11"
+            + "\1\53\12\11\1\54\4\11\7\0\3\11\3\0\3\11"
+            + "\5\0\3\11\1\55\15\11\7\0\3\11\3\0\3\11"
+            + "\5\0\6\11\1\56\4\11\1\57\5\11\7\0\3\11"
+            + "\3\0\3\11\5\0\5\11\1\60\13\11\7\0\3\11"
+            + "\3\0\3\11\5\0\13\11\1\61\5\11\7\0\3\11"
+            + "\3\0\3\11\5\0\1\11\1\62\12\11\1\63\4\11"
+            + "\7\0\3\11\3\0\3\11\5\0\3\11\1\64\11\11"
+            + "\1\65\3\11\7\0\3\11\3\0\3\11\5\0\15\11"
+            + "\1\66\3\11\7\0\3\11\3\0\3\11\5\0\1\11"
+            + "\1\67\17\11\7\0\3\11\3\0\3\11\5\0\1\11"
+            + "\1\70\17\11\7\0\1\71\45\0\3\11\3\0\2\11"
+            + "\1\72\5\0\21\11\7\0\3\11\3\0\3\11\5\0"
+            + "\1\73\20\11\7\0\3\11\3\0\3\11\5\0\1\11"
+            + "\1\74\17\11\7\0\3\11\3\0\3\11\5\0\2\11"
+            + "\1\75\16\11\7\0\3\11\3\0\3\11\5\0\3\11"
+            + "\1\76\15\11\7\0\3\11\3\0\3\11\5\0\5\11"
+            + "\1\77\13\11\7\0\3\11\3\0\3\11\5\0\7\11"
+            + "\1\100\11\11\7\0\3\11\3\0\1\101\2\11\5\0"
+            + "\21\11\7\0\3\11\3\0\3\11\5\0\6\11\1\102"
+            + "\12\11\7\0\3\11\3\0\1\103\2\11\5\0\21\11"
+            + "\7\0\3\11\3\0\1\11\1\104\1\11\5\0\21\11"
+            + "\7\0\3\11\3\0\1\11\1\105\1\11\5\0\21\11"
+            + "\7\0\3\11\3\0\3\11\5\0\12\11\1\106\6\11"
+            + "\7\0\3\11\3\0\3\11\5\0\15\11\1\107\3\11"
+            + "\7\0\3\11\3\0\3\11\5\0\1\110\20\11\7\0"
+            + "\3\11\3\0\3\11\5\0\15\11\1\111\3\11\7\0"
+            + "\3\11\3\0\3\11\5\0\3\11\1\112\15\11\7\0"
+            + "\3\11\3\0\3\11\5\0\13\11\1\113\5\11\7\0"
+            + "\3\11\3\0\1\114\2\11\5\0\21\11\7\0\3\11"
+            + "\3\0\3\11\5\0\3\11\1\115\15\11\7\0\3\11"
+            + "\3\0\3\11\5\0\7\11\1\116\11\11\7\0\3\11"
+            + "\3\0\3\11\5\0\1\117\20\11\7\0\3\11\3\0"
+            + "\3\11\5\0\6\11\1\120\12\11\7\0\3\11\3\0"
+            + "\1\11\1\121\1\11\5\0\21\11\7\0\3\11\3\0"
+            + "\3\11\5\0\6\11\1\122\12\11\7\0\3\11\3\0"
+            + "\3\11\5\0\12\11\1\123\4\11\1\124\1\11\7\0"
+            + "\3\11\3\0\3\11\5\0\3\11\1\125\15\11\7\0"
+            + "\3\11\3\0\3\11\5\0\3\11\1\126\15\11\7\0"
+            + "\3\11\3\0\3\11\5\0\3\11\1\127\15\11\7\0"
+            + "\3\11\3\0\3\11\5\0\13\11\1\130\5\11\7\0"
+            + "\3\11\3\0\3\11\5\0\3\11\1\131\15\11\7\0"
+            + "\3\11\3\0\3\11\5\0\1\11\1\132\17\11\7\0"
+            + "\3\11\3\0\3\11\5\0\3\11\1\133\15\11\7\0"
+            + "\3\11\3\0\3\11\5\0\5\11\1\134\13\11\7\0"
+            + "\3\11\3\0\3\11\5\0\5\11\1\135\13\11\7\0"
+            + "\3\11\3\0\1\136\2\11\5\0\21\11\7\0\3\11"
+            + "\3\0\3\11\5\0\13\11\1\137\5\11\7\0\3\11"
+            + "\3\0\3\11\5\0\20\11\1\140\7\0\3\11\3\0"
+            + "\3\11\5\0\2\11\1\141\16\11\7\0\3\11\3\0"
+            + "\3\11\5\0\1\11\1\142\17\11\7\0\3\11\3\0"
+            + "\3\11\5\0\3\11\1\143\15\11\1\0";
 
     private static int[] zzUnpackTrans() {
-        int[] result = new int[1938];
+        int[] result = new int[2394];
         int offset = 0;
         offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
         return result;
@@ -230,11 +245,11 @@ public class LexicalAnalyzer {
     private static final int[] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
     private static final String ZZ_ATTRIBUTE_PACKED_0
-            = "\1\0\5\11\4\1\3\11\3\1\2\11\13\1\1\11"
-            + "\1\0\5\1\4\11\53\1";
+            = "\1\0\5\11\4\1\3\11\3\1\2\11\15\1\1\11"
+            + "\1\0\5\1\4\11\71\1";
 
     private static int[] zzUnpackAttribute() {
-        int[] result = new int[83];
+        int[] result = new int[99];
         int offset = 0;
         offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
         return result;
@@ -347,7 +362,6 @@ public class LexicalAnalyzer {
     public LexicalAnalyzer(java.io.Reader in) {
         this.tokens = new ArrayList();
         this.zzReader = in;
-        
         this.nextToken = 0;
     }
 
@@ -718,222 +732,246 @@ public class LexicalAnalyzer {
                         adicionarToken("DESCONHECIDO", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 38:
+                    case 42:
                         break;
                     case 2: {
                     }
                     // fall through
-                    case 39:
+                    case 43:
                         break;
                     case 3: {
                         adicionarToken("FIM", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 40:
+                    case 44:
                         break;
                     case 4: {
                         adicionarToken("VIRGULA", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 41:
+                    case 45:
                         break;
                     case 5: {
                         adicionarToken("PONTO_VIRGULA", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 42:
+                    case 46:
                         break;
                     case 6: {
                         adicionarToken("DOIS_PONTOS", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 43:
+                    case 47:
                         break;
                     case 7: {
                         adicionarToken("NUM_INT", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 44:
+                    case 48:
                         break;
                     case 8: {
                         adicionarToken("IDENTIFICADOR", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 45:
+                    case 49:
                         break;
                     case 9: {
                         adicionarToken("OPSOMA", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 46:
+                    case 50:
                         break;
                     case 10: {
                         adicionarToken("OPSUB", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 47:
+                    case 51:
                         break;
                     case 11: {
                         adicionarToken("OPMUL", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 48:
+                    case 52:
                         break;
                     case 12: {
                         adicionarToken("AP", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 49:
+                    case 53:
                         break;
                     case 13: {
                         adicionarToken("FP", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 50:
+                    case 54:
                         break;
                     case 14: {
                         adicionarToken("OP_MENOR", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 51:
+                    case 55:
                         break;
                     case 15: {
                         adicionarToken("OP_MAIOR", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 52:
+                    case 56:
                         break;
                     case 16: {
                         adicionarToken("OP_ATRI", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 53:
+                    case 57:
                         break;
                     case 17: {
                         adicionarToken("palavra_do", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 54:
+                    case 58:
                         break;
                     case 18: {
                         adicionarToken("palavra_if", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 55:
+                    case 59:
                         break;
                     case 19: {
                         adicionarToken("OP_DIF", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 56:
+                    case 60:
                         break;
                     case 20: {
                         adicionarToken("OP_MENOR_IGUAL", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 57:
+                    case 61:
                         break;
                     case 21: {
                         adicionarToken("OP_MAIOR_IGUAL", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 58:
+                    case 62:
                         break;
                     case 22: {
                         adicionarToken("OP_IGUAL", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 59:
+                    case 63:
                         break;
                     case 23: {
                         adicionarToken("palavra_or", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 60:
+                    case 64:
                         break;
                     case 24: {
                         adicionarToken("NUM_REAL", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 61:
+                    case 65:
                         break;
                     case 25: {
                         adicionarToken("OPDIV", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 62:
+                    case 66:
                         break;
                     case 26: {
                         adicionarToken("tipo_int", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 63:
+                    case 67:
                         break;
                     case 27: {
                         adicionarToken("palavra_var", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 64:
+                    case 68:
                         break;
                     case 28: {
                         adicionarToken("palavra_end", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 65:
+                    case 69:
                         break;
                     case 29: {
-                        adicionarToken("palavra_not", yytext(), yyline, yycolumn);
-                    }
-                    // fall through
-                    case 66:
-                        break;
-                    case 30: {
                         adicionarToken("palavra_and", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 67:
+                    case 70:
                         break;
-                    case 31: {
-                        adicionarToken("palavra_else", yytext(), yyline, yycolumn);
+                    case 30: {
+                        adicionarToken("palavra_not", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 68:
+                    case 71:
+                        break;
+                    case 31: {
+                        adicionarToken("palavra_true", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 72:
                         break;
                     case 32: {
                         adicionarToken("palavra_then", yytext(), yyline, yycolumn);
                     }
                     // fall through
-                    case 69:
-                        break;
-                    case 33: {
-                        adicionarToken("palavra_begin", yytext(), yyline, yycolumn);
-                    }
-                    // fall through
-                    case 70:
-                        break;
-                    case 34: {
-                        adicionarToken("palavra_while", yytext(), yyline, yycolumn);
-                    }
-                    // fall through
-                    case 71:
-                        break;
-                    case 35: {
-                        adicionarToken("tipo_boolean", yytext(), yyline, yycolumn);
-                    }
-                    // fall through
-                    case 72:
-                        break;
-                    case 36: {
-                        adicionarToken("palavra_program", yytext(), yyline, yycolumn);
-                    }
-                    // fall through
                     case 73:
                         break;
-                    case 37: {
-                        adicionarToken("palavra_procedure", yytext(), yyline, yycolumn);
+                    case 33: {
+                        adicionarToken("palavra_read", yytext(), yyline, yycolumn);
                     }
                     // fall through
                     case 74:
+                        break;
+                    case 34: {
+                        adicionarToken("palavra_else", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 75:
+                        break;
+                    case 35: {
+                        adicionarToken("palavra_false", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 76:
+                        break;
+                    case 36: {
+                        adicionarToken("palavra_write", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 77:
+                        break;
+                    case 37: {
+                        adicionarToken("palavra_while", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 78:
+                        break;
+                    case 38: {
+                        adicionarToken("palavra_begin", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 79:
+                        break;
+                    case 39: {
+                        adicionarToken("tipo_boolean", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 80:
+                        break;
+                    case 40: {
+                        adicionarToken("palavra_program", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 81:
+                        break;
+                    case 41: {
+                        adicionarToken("palavra_procedure", yytext(), yyline, yycolumn);
+                    }
+                    // fall through
+                    case 82:
                         break;
                     default:
                         zzScanError(ZZ_NO_MATCH);
@@ -944,7 +982,7 @@ public class LexicalAnalyzer {
 
     /**
      * Retorna o próximo Token para a análise sintática
-     * 
+     *
      * @return Token
      */
     public Token getNextToken() {
@@ -960,11 +998,10 @@ public class LexicalAnalyzer {
 
     /**
      * Informa se ainda há tokens a serem lidos pelo analisador sintático
-     * 
+     *
      * @return boolean
      */
     public boolean hasNextToken() {
         return this.nextToken < this.tokens.size();
     }
-
 }
