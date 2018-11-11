@@ -55,6 +55,10 @@ OP_ATRI = ":="
 OP_IGUAL = "=="
 OP_DIF = "<>"
 
+palavra_true = "true"
+palavra_false = "false"
+palavra_read = "read"
+palavra_write = "write"
 palavra_begin = "begin"
 palavra_end = "end"
 palavra_if = "if" 
@@ -78,11 +82,15 @@ IDENTIFICADOR = {LETRA}({LETRA}|{DIGITO})*
 <YYINITIAL> {
 
 	{BRANCO}                    {}
-	{VIRGULA}                   {adicionarToken("VIRGUL", yytext(), yyline, yycolumn);}
+	{VIRGULA}                   {adicionarToken("VIRGULA", yytext(), yyline, yycolumn);}
 	{PONTO_VIRGULA}             {adicionarToken("PONTO_VIRGULA", yytext(), yyline, yycolumn);}
 	{DOIS_PONTOS}               {adicionarToken("DOIS_PONTOS", yytext(), yyline, yycolumn);}
 
+	{palavra_false}             { adicionarToken("palavra_false", yytext(), yyline, yycolumn); }
+	{palavra_true}              { adicionarToken("palavra_true", yytext(), yyline, yycolumn); }
 	{palavra_begin}             { adicionarToken("palavra_begin", yytext(), yyline, yycolumn); }
+	{palavra_read}              { adicionarToken("palavra_read", yytext(), yyline, yycolumn); }
+	{palavra_write}             { adicionarToken("palavra_write", yytext(), yyline, yycolumn); }
 	{palavra_end}               { adicionarToken("palavra_end", yytext(), yyline, yycolumn); }
 	{palavra_if}                { adicionarToken("palavra_if", yytext(), yyline, yycolumn); }
 	{palavra_then}              { adicionarToken("palavra_then", yytext(), yyline, yycolumn); }
