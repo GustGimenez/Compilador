@@ -38,50 +38,9 @@ public class IPrincipal extends javax.swing.JFrame {
      * Creates new form IPrincipal
      */
     public IPrincipal() {
+        this.setExtendedState(IPrincipal.MAXIMIZED_BOTH);
         initComponents();
         this.arqs = new GerenciadorArquivos();
-        this.inicializaPalavrasReservadas();
-    }
-
-    /**
-     * Inicializa o vetor de palavras reservadas com as palavras da linguagem
-     */
-    private void inicializaPalavrasReservadas() {
-        this.palavrasReservadas = new ArrayList();
-
-        palavrasReservadas.add("if");
-        palavrasReservadas.add("then");
-        palavrasReservadas.add("else");
-        palavrasReservadas.add("do");
-        palavrasReservadas.add("while");
-        palavrasReservadas.add("for");
-        palavrasReservadas.add("var");
-        palavrasReservadas.add("begin");
-        palavrasReservadas.add("end");
-        palavrasReservadas.add("div");
-        palavrasReservadas.add("and");
-        palavrasReservadas.add("not");
-        palavrasReservadas.add("true");
-        palavrasReservadas.add("false");
-        palavrasReservadas.add("program");
-        palavrasReservadas.add("int");
-        palavrasReservadas.add("boolean");
-        palavrasReservadas.add("read");
-        palavrasReservadas.add("write");
-        palavrasReservadas.add("procedure");
-    }
-
-    /**
-     * Pega o texto no editor de texto e retona a última palavra dividade por
-     * espaço
-     *
-     * @return String
-     */
-    private String getUltimaPalavra() {
-        String texto = this.EditorTexto.getText();
-        String[] palavras = texto.split(" ");
-
-        return palavras[palavras.length - 1];
     }
 
     /**
@@ -97,6 +56,8 @@ public class IPrincipal extends javax.swing.JFrame {
         EditorTexto = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         TabelaTokens = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ExibirSintatico = new javax.swing.JTextArea();
         BarraMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         AbrirArquivo = new javax.swing.JMenuItem();
@@ -146,6 +107,11 @@ public class IPrincipal extends javax.swing.JFrame {
             TabelaTokens.getColumnModel().getColumn(2).setResizable(false);
             TabelaTokens.getColumnModel().getColumn(4).setResizable(false);
         }
+
+        ExibirSintatico.setEditable(false);
+        ExibirSintatico.setColumns(20);
+        ExibirSintatico.setRows(5);
+        jScrollPane3.setViewportView(ExibirSintatico);
 
         jMenu1.setText("Arquivo");
 
@@ -200,17 +166,20 @@ public class IPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -252,10 +221,12 @@ public class IPrincipal extends javax.swing.JFrame {
         String entrada = this.EditorTexto.getText();
         this.lexico = new LexicalAnalyzer(new StringReader(entrada));
         this.sintatico = new AnalisadorSintatico();
-        
+
         try {
             this.lexico.yylex();
+            this.populaTabelaTokens(lexico.getTokens());
             this.sintatico.analisePrograma(lexico);
+            this.ExibirSintatico.setText(this.sintatico.getMensagem());
         } catch (IOException ex) {
             Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -349,11 +320,13 @@ public class IPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem AnalisarSintatico;
     private javax.swing.JMenuBar BarraMenu;
     private javax.swing.JTextPane EditorTexto;
+    private javax.swing.JTextArea ExibirSintatico;
     private javax.swing.JMenuItem SalvarArquivo;
     private javax.swing.JTable TabelaTokens;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
 }
