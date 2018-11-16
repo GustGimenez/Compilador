@@ -25,6 +25,7 @@ public class Simbolo {
         this.valor = valor;
         this.utilizada = false;
         this.categaoria = categoria;
+        this.tipo = "--";
     }
 
     public String getClassificacao() {
@@ -37,5 +38,41 @@ public class Simbolo {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public boolean isUtilizada() {
+        return utilizada;
+    }
+
+    public void setUtilizada(boolean utilizada) {
+        this.utilizada = utilizada;
+    }
+
+    public int getCategaoria() {
+        return categaoria;
+    }
+
+    public void setCategaoria(int categaoria) {
+        this.categaoria = categaoria;
+    }
+    
+    public String getTipo() {
+        return this.tipo;
     }
 }

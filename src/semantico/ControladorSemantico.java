@@ -7,8 +7,7 @@ package semantico;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -22,7 +21,7 @@ public class ControladorSemantico {
     private HashMap<String, Tabela> tabelas;
 
     public ControladorSemantico() {
-        this.tabelas.clear();
+        this.tabelas = new HashMap();
     }
 
     /**
@@ -70,6 +69,28 @@ public class ControladorSemantico {
         for (Simbolo s : simbolos) {
             s.setTipo(tipo);
             t.addSimbolo(s, s.getLexema());
+        }
+    }
+    
+    public void imprimirTabelas() {
+        Set<String> ts = this.tabelas.keySet();
+        Set<String> t2;
+        Tabela t;
+        Simbolo simb;
+        
+        for (String s : ts) {
+            System.out.println("ESCOPO: " + s + "\n");
+            
+            t = this.tabelas.get(s);
+            t2 = t.getSimbolos().keySet();
+            
+            for (String s2 : t2) {
+                simb = t.getSimbolos().get(s2);
+                System.out.println("SIMBOLO: " + s2);
+                System.out.println(simb.getClassificacao() + ", " + simb.getCategaoria() + 
+                        ", " + simb.getTipo());
+            }
+            System.out.println("_______________________");
         }
     }
 }
