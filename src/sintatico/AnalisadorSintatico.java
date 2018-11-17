@@ -42,6 +42,15 @@ public class AnalisadorSintatico {
                 + "\t -> Linha: " + t.getLinha() + ", Coluna: "
                 + t.getColunaInicial() + "\n";
     }
+    
+    /**
+     * Retorna os erros semânticos
+     * 
+     * @return ArrayList<String>
+     */
+    public ArrayList<String> getErrosSemanticos() {
+        return this.semantico.getErros();
+    }
 
     public void analisePrograma(LexicalAnalyzer lex) {
         this.semantico = new ControladorSemantico();
@@ -107,7 +116,8 @@ public class AnalisadorSintatico {
                 t = lex.getNextToken();
             }
         }
-        this.semantico.imprimirTabelas();
+        
+        this.escopoAtual = "global";
         lex.rewindTokenCounter();
         this.analiseComandoComposto(lex);
     }
@@ -316,6 +326,7 @@ public class AnalisadorSintatico {
         switch (t.getClassificacao()) {
             case "IDENTIFICADOR":
                 this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
+                this.semantico.verificaDeclaracao(this.escopoAtual, t);
                 if (lex.hasNextToken()) {
                     aux = lex.getNextToken();
                     if (aux.getClassificacao().equals("OP_ATRI")) { // Atribuição
@@ -585,6 +596,7 @@ public class AnalisadorSintatico {
 
             switch (t.getClassificacao()) {
                 case "IDENTIFICADOR":
+                    this.semantico.verificaDeclaracao(this.escopoAtual, t);
                     this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
                     break;
 

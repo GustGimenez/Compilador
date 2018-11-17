@@ -8,6 +8,7 @@ package semantico;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import lexico.Token;
 
 /**
  *
@@ -19,9 +20,19 @@ public class ControladorSemantico {
      * Guarda as tabelas de cada escopo do programa
      */
     private HashMap<String, Tabela> tabelas;
+    
+    /**
+     * Guarda os erros semânticos
+     */
+    private ArrayList<String> erros;
 
     public ControladorSemantico() {
         this.tabelas = new HashMap();
+        this.erros = new ArrayList();
+    }
+    
+    public ArrayList<String> getErros() {
+        return this.erros;
     }
 
     /**
@@ -71,6 +82,22 @@ public class ControladorSemantico {
             t.addSimbolo(s, s.getLexema());
         }
     }
+    
+    /**
+     * Verifica se um símbolo usado já foi declarado no escopo atual
+     * 
+     * @param escopo String
+     * @param token Token
+     */
+    public void verificaDeclaracao(String escopo, Token token) {
+        Tabela t = this.tabelas.get(escopo);
+        
+        if (t.getSimbolos().get(token.getLexema()) == null) {
+            this.erros.add("ERRO SEMÂNTICO - " + 
+                    "'" + token.getLexema() + "' não declarado.\n" + 
+                    "Linha: " + token.getLinha() + "\n");
+        }
+    } 
     
     public void imprimirTabelas() {
         Set<String> ts = this.tabelas.keySet();

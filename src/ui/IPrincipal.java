@@ -147,7 +147,7 @@ public class IPrincipal extends javax.swing.JFrame {
         jMenu2.add(AnalisarLexico);
 
         AnalisarSintatico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        AnalisarSintatico.setText("Sintática");
+        AnalisarSintatico.setText("Sintática/Semântica");
         AnalisarSintatico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AnalisarSintaticoActionPerformed(evt);
@@ -226,7 +226,7 @@ public class IPrincipal extends javax.swing.JFrame {
             this.lexico.yylex();
             this.populaTabelaTokens(lexico.getTokens());
             this.sintatico.analisePrograma(lexico);
-            this.ExibirSintatico.setText(this.sintatico.getMensagem());
+            this.ExibirSintatico.setText(this.sintatico.getErrosSemanticos().toString().replace("[", "").replace("]", ""));
         } catch (IOException ex) {
             Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }

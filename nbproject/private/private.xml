@@ -5,6 +5,8 @@
         <group>
             <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4º/Compiladores/Compilador/src/sintatico/AnalisadorSintatico.java</file>
             <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4º/Compiladores/Compilador/src/ui/IPrincipal.java</file>
+            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4º/Compiladores/Compilador/src/semantico/Tabela.java</file>
+            <file>file:/C:/Users/Gustavo%20Gimenez/Documents/Unesp/4º/Compiladores/Compilador/src/semantico/ControladorSemantico.java</file>
         </group>
     </open-files>
 </project-private>
