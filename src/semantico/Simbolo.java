@@ -75,4 +75,8 @@ public class Simbolo {
     public String getTipo() {
         return this.tipo;
     }
+    
+    public int getLinha() {
+        return this.token.getLinha();
+    }
 }

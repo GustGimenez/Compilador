@@ -52,7 +52,11 @@ public class ControladorSemantico {
      */
     public void colocar(String escopo, Simbolo variavel) {
         Tabela t = this.tabelas.get(escopo);
-        t.addSimbolo(variavel, variavel.getLexema());
+        if (!t.addSimbolo(variavel, variavel.getLexema())) {
+            this.erros.add("ERRO SEMÂNTICO - " + 
+                    "'" + variavel.getLexema() + "' já declarado.\n" + 
+                    "Linha: " + variavel.getLinha() + "\n");
+        }
     }
 
     /**

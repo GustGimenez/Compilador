@@ -113,6 +113,7 @@ public class AnalisadorSintatico {
 
             while (t.getClassificacao().equals("palavra_procedure")) {
                 this.analiseParteDeclaracoesSubrotinas(lex);
+                this.escopoAtual = "global";
                 t = lex.getNextToken();
             }
         }
