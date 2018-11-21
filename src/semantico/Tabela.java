@@ -23,9 +23,16 @@ public class Tabela {
      * 
      * @param s objeto Simbolo a ser inserido
      * @param nome_var String com o nome do escopo
+     * 
+     * @return boolean se inseriu ou não
      */
-    public void addSimbolo(Simbolo s, String nome_var) {
-        this.simbolos.put(nome_var, s);
+    public boolean addSimbolo(Simbolo s, String nome_var) {
+        if (this.simbolos.containsKey(nome_var)) {
+            return false;
+        } else {
+            this.simbolos.put(nome_var, s);
+            return true;
+        }
     }
     
     /**
