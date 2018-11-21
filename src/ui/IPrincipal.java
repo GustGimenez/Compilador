@@ -221,12 +221,25 @@ public class IPrincipal extends javax.swing.JFrame {
         String entrada = this.EditorTexto.getText();
         this.lexico = new LexicalAnalyzer(new StringReader(entrada));
         this.sintatico = new AnalisadorSintatico();
+        String errosSintaticos = "";
+        String errosSemanticos = "";
 
         try {
             this.lexico.yylex();
             this.populaTabelaTokens(lexico.getTokens());
             this.sintatico.analisePrograma(lexico);
-            this.ExibirSintatico.setText(this.sintatico.getErrosSemanticos().toString().replace("[", "").replace("]", ""));
+            errosSintaticos = this.sintatico.getMensagem();
+            errosSemanticos = this.sintatico.getErrosSemanticos().toString().replace("[", "").replace("]", "");
+            
+            if (errosSintaticos.equals("")) {
+                if (errosSemanticos.equals((""))) {
+                    this.ExibirSintatico.setText("Nenhum erro encontrado!");
+                }
+            } else {
+                this.ExibirSintatico.setText(errosSintaticos + "\n" + errosSemanticos);
+            }
+            
+            
         } catch (IOException ex) {
             Logger.getLogger(IPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
