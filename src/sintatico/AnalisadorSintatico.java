@@ -16,20 +16,24 @@ import semantico.Simbolo;
  * @author Gustavo Gimenez
  */
 public class AnalisadorSintatico {
+
     private String mensagem;
     private ControladorSemantico semantico;
     private String escopoAtual;
-    
+    private String escopoAux;
+    private boolean booleana;
+    private boolean estaAtribuindo;
+    private boolean analiseParametros;
 
     /**
      * Retorna tudo lido pelo analisador sintático
-     * 
+     *
      * @return String com a mensagem
      */
     public String getMensagem() {
         return this.mensagem;
     }
-    
+
     /**
      * Imprime o erro na console
      *
@@ -42,10 +46,10 @@ public class AnalisadorSintatico {
                 + "\t -> Linha: " + t.getLinha() + ", Coluna: "
                 + t.getColunaInicial() + "\n";
     }
-    
+
     /**
      * Retorna os erros semânticos
-     * 
+     *
      * @return ArrayList<String>
      */
     public ArrayList<String> getErrosSemanticos() {
@@ -55,7 +59,7 @@ public class AnalisadorSintatico {
     public void analisePrograma(LexicalAnalyzer lex) {
         this.semantico = new ControladorSemantico();
         this.mensagem = "";
-        
+
         Token t;
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
@@ -97,6 +101,8 @@ public class AnalisadorSintatico {
                 this.mensagem += "Fim do programa" + "\n";
             }
         }
+        
+        this.semantico.verificaNaoUsadas();
     }
 
     private void analiseBloco(LexicalAnalyzer lex) {
@@ -117,7 +123,7 @@ public class AnalisadorSintatico {
                 t = lex.getNextToken();
             }
         }
-        
+
         this.escopoAtual = "global";
         lex.rewindTokenCounter();
         this.analiseComandoComposto(lex);
@@ -126,15 +132,15 @@ public class AnalisadorSintatico {
     private void analiseParteDeclaracoesVariaveis(LexicalAnalyzer lex, String tipo) {
         Token t;
         Simbolo s;
-        
+
         while (true) {
             if (lex.hasNextToken()) {
                 t = lex.getNextToken();
                 if (t.getClassificacao().equals("IDENTIFICADOR")) {
-                    s = new Simbolo(t, "", Simbolo.VARIAVEL);
+                    s = new Simbolo(t, Simbolo.VARIAVEL);
                     s.setTipo(tipo);
                     this.semantico.colocar(this.escopoAtual, s);
-                    
+
                     this.mensagem += "Lido IDENTIFICADOR " + t.getLexema();
                 } else {
                     this.erro(t, "IDENTIFICADOR");
@@ -162,15 +168,15 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("IDENTIFICADOR")) {
                 this.erro(t, "IDENTIFICADOR");
             } else {
-                this.semantico.colocar(this.escopoAtual, 
-                            new Simbolo(t, "", Simbolo.PROCEDURE));
+                this.semantico.colocar(this.escopoAtual,
+                        new Simbolo(t, Simbolo.PROCEDURE));
                 this.escopoAtual = t.getLexema();
                 this.semantico.colocarEscopo(this.escopoAtual);
-                
+
                 this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
             }
         }
-        
+
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
             if (t.getClassificacao().equals("AP")) {
@@ -180,7 +186,7 @@ public class AnalisadorSintatico {
                 lex.rewindTokenCounter();
             }
         }
-        
+
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
             if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
@@ -233,7 +239,7 @@ public class AnalisadorSintatico {
     private void analiseParametrosFormais(LexicalAnalyzer lex) {
         Token t;
         ArrayList<Simbolo> simbolos;
-        
+
         while (true) {
             if (lex.hasNextToken()) {
                 t = lex.getNextToken();
@@ -272,14 +278,18 @@ public class AnalisadorSintatico {
     private ArrayList<Simbolo> analiseListaIdentificadores(LexicalAnalyzer lex) {
         Token t;
         ArrayList<Simbolo> simbolos = new ArrayList();
-        
+        Simbolo s;
+        int ordem = 0;
+
         while (true) {
             if (lex.hasNextToken()) {
                 t = lex.getNextToken();
                 if (!t.getClassificacao().equals("IDENTIFICADOR")) {
                     this.erro(t, "IDENTIFICADOR");
                 } else {
-                    simbolos.add(new Simbolo(t, "", Simbolo.PARAMETRO));
+                    s = new Simbolo(t, Simbolo.PARAMETRO);
+                    s.setOrdem(ordem++);
+                    simbolos.add(s);
                     this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
                 }
             }
@@ -327,12 +337,19 @@ public class AnalisadorSintatico {
         switch (t.getClassificacao()) {
             case "IDENTIFICADOR":
                 this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
-                this.semantico.verificaDeclaracao(this.escopoAtual, t);
+                if (this.semantico.verificaDeclaracao(this.escopoAtual, t)) {
+                    this.semantico.usaSimbolo(this.escopoAtual, t);
+                }
                 if (lex.hasNextToken()) {
                     aux = lex.getNextToken();
                     if (aux.getClassificacao().equals("OP_ATRI")) { // Atribuição
+                        this.estaAtribuindo = true;
                         this.mensagem += "Lido OP_ATRI" + "\n";
+                        this.booleana = false;
                         this.analiseExpressao(lex);
+                        this.semantico.verificaAtribuicao(this.escopoAtual, t, this.booleana);
+                        this.booleana = false;
+                        this.estaAtribuindo = false;
                     } else { // Chamada de Procedimento
                         lex.rewindTokenCounter();
                         lex.rewindTokenCounter();
@@ -505,6 +522,7 @@ public class AnalisadorSintatico {
 
     private void analiseChamadaProcedimento(LexicalAnalyzer lex) {
         Token t;
+        this.escopoAux = "";
 
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
@@ -513,6 +531,10 @@ public class AnalisadorSintatico {
                 this.erro(t, "IDENTIFICADOR");
                 lex.rewindTokenCounter();
             } else {
+                if (this.semantico.verificaDeclaracao(this.escopoAtual, t)) {
+                    this.semantico.usaSimbolo(this.escopoAtual, t);
+                }
+                this.escopoAux = t.getLexema();
                 this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
             }
         }
@@ -521,7 +543,11 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
             if (t.getClassificacao().equals("AP")) {
                 this.mensagem += "Lido AP" + "\n";
+                this.semantico.getParametros(this.escopoAux);
+                this.analiseParametros = true;
+                this.booleana = false;
                 this.analiseListaExpressoes(lex);
+                this.analiseParametros = false;
 
                 t = lex.getNextToken();
                 if (!t.getClassificacao().equals(("FP"))) {
@@ -541,6 +567,9 @@ public class AnalisadorSintatico {
 
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
+            if (t.getClassificacao().equals("palavra_or") && (this.analiseParametros || this.estaAtribuindo)) {
+                this.booleana = true;
+            }
             if (t.getClassificacao().equals("OPSOMA")
                     || t.getClassificacao().equals("OPSUB")
                     || t.getClassificacao().equals("palavra_or")) {
@@ -552,6 +581,9 @@ public class AnalisadorSintatico {
         do {
             this.analiseTermo(lex);
             t = lex.getNextToken();
+            if (t.getClassificacao().equals("palavra_or") && (this.analiseParametros || this.estaAtribuindo)) {
+                this.booleana = true;
+            }
         } while (t.getClassificacao().equals("OPSOMA")
                 || t.getClassificacao().equals("OPSUB")
                 || t.getClassificacao().equals("palavra_or"));
@@ -567,6 +599,9 @@ public class AnalisadorSintatico {
                 case "OP_MAIOR_IGUAL":
                 case "OP_IGUAL":
                 case "OP_DIF":
+                    if ((this.analiseParametros || this.estaAtribuindo)) {
+                        this.booleana = true;
+                    }
                     this.analiseExpressaoSimples(lex);
                     break;
 
@@ -582,6 +617,9 @@ public class AnalisadorSintatico {
         do {
             this.analiseFator(lex);
             t = lex.getNextToken();
+            if (t.getClassificacao().equals("palavra_and") && (this.analiseParametros || this.estaAtribuindo)) {
+                this.booleana = true;
+            }
         } while (t.getClassificacao().equals("OPDIV")
                 || t.getClassificacao().equals("OPMUL")
                 || t.getClassificacao().equals("palavra_and"));
@@ -597,7 +635,14 @@ public class AnalisadorSintatico {
 
             switch (t.getClassificacao()) {
                 case "IDENTIFICADOR":
-                    this.semantico.verificaDeclaracao(this.escopoAtual, t);
+                    if (this.semantico.verificaDeclaracao(this.escopoAtual, t)) {
+                        this.semantico.usaSimbolo(this.escopoAtual, t);
+                    }
+                    if ((this.analiseParametros || this.estaAtribuindo)) {
+                        if (this.semantico.verificaBooleanVariavel(escopoAtual, t)) {
+                            this.booleana = true;
+                        }
+                    }
                     this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
                     break;
 
@@ -615,15 +660,24 @@ public class AnalisadorSintatico {
 
                 case "palavra_not":
                     this.mensagem += "Lido palavra_not" + "\n";
+                    if ((this.analiseParametros || this.estaAtribuindo)) {
+                        this.booleana = true;
+                    }
                     this.analiseFator(lex);
                     break;
 
                 case "palavra_true":
                     this.mensagem += "Lido palavra_true" + "\n";
+                    if ((this.analiseParametros || this.estaAtribuindo)) {
+                        this.booleana = true;
+                    }
                     break;
 
                 case "palavra_false":
                     this.mensagem += "Lido palavra_false" + "\n";
+                    if ((this.analiseParametros || this.estaAtribuindo)) {
+                        this.booleana = true;
+                    }
                     break;
             }
         }
@@ -631,6 +685,12 @@ public class AnalisadorSintatico {
 
     private void analiseListaExpressoes(LexicalAnalyzer lex) {
         this.analiseExpressao(lex);
+
+        if (this.analiseParametros) {
+            this.semantico.verificaParametro(this.escopoAux, this.booleana, lex.getNextToken());
+            lex.rewindTokenCounter();
+            this.booleana = false;
+        }
 
         Token t;
         if (lex.hasNextToken()) {

@@ -1,5 +1,6 @@
 package semantico;
 
+import java.util.Comparator;
 import lexico.Token;
 
 /**
@@ -9,10 +10,10 @@ import lexico.Token;
 public class Simbolo {
 
     private Token token;
-    private String valor;
     private boolean utilizada;
     private int categaoria;
     private String tipo;
+    private int ordem;
 
     public static final int PROCEDURE = 1;
 
@@ -20,9 +21,8 @@ public class Simbolo {
 
     public static final int PARAMETRO = 3;
 
-    public Simbolo(Token token, String valor, int categoria) {
+    public Simbolo(Token token, int categoria) {
         this.token = token;
-        this.valor = valor;
         this.utilizada = false;
         this.categaoria = categoria;
         this.tipo = "--";
@@ -48,14 +48,6 @@ public class Simbolo {
         this.token = token;
     }
 
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
     public boolean isUtilizada() {
         return utilizada;
     }
@@ -78,5 +70,13 @@ public class Simbolo {
     
     public int getLinha() {
         return this.token.getLinha();
+    }
+
+    public int getOrdem() {
+        return ordem;
+    }
+
+    public void setOrdem(int ordem) {
+        this.ordem = ordem;
     }
 }
