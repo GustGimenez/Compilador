@@ -38,8 +38,10 @@ public class IPrincipal extends javax.swing.JFrame {
      * Creates new form IPrincipal
      */
     public IPrincipal() {
-        this.setExtendedState(IPrincipal.MAXIMIZED_BOTH);
         initComponents();
+//        TextLineNumber t = new TextLineNumber(this.EditorTexto);
+//        this.jScrollPane1.setRowHeaderView(t);
+        this.setExtendedState(IPrincipal.MAXIMIZED_BOTH);
         this.arqs = new GerenciadorArquivos();
     }
 
