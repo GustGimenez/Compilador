@@ -66,8 +66,6 @@ public class AnalisadorSintatico {
 
             if (!t.getClassificacao().equals("palavra_program")) {
                 this.erro(t, "palavra_program");
-            } else {
-                this.mensagem += "Lido palavra_program " + t.getLexema() + "\n";
             }
         }
 
@@ -77,7 +75,6 @@ public class AnalisadorSintatico {
                 this.erro(t, "IDENTIFICADOR");
             } else {
                 this.semantico.colocarEscopo("global");
-                this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
             }
         }
 
@@ -85,8 +82,6 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
             if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
                 this.erro(t, "PONTO_VIRGULA");
-            } else {
-                this.mensagem += "Lido PONTO_VIRGULA " + t.getLexema() + "\n";
             }
         }
 
@@ -97,11 +92,9 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
             if (!t.getClassificacao().equals("FIM")) {
                 this.erro(t, "FIM");
-            } else {
-                this.mensagem += "Fim do programa" + "\n";
             }
         }
-        
+
         this.semantico.verificaNaoUsadas();
     }
 
@@ -112,7 +105,6 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
             while (t.getClassificacao().equals("tipo_boolean")
                     || t.getClassificacao().equals("tipo_int")) {
-                this.mensagem += "Lido " + t.getClassificacao() + " " + t.getLexema() + "\n";
                 this.analiseParteDeclaracoesVariaveis(lex, t.getClassificacao());
                 t = lex.getNextToken();
             }
@@ -140,8 +132,6 @@ public class AnalisadorSintatico {
                     s = new Simbolo(t, Simbolo.VARIAVEL);
                     s.setTipo(tipo);
                     this.semantico.colocar(this.escopoAtual, s);
-
-                    this.mensagem += "Lido IDENTIFICADOR " + t.getLexema();
                 } else {
                     this.erro(t, "IDENTIFICADOR");
                 }
@@ -149,12 +139,8 @@ public class AnalisadorSintatico {
 
             if (lex.hasNextToken()) {
                 t = lex.getNextToken();
-                if (t.getClassificacao().equals("VIRGULA")) {
-                    this.mensagem += "Lido VIRGULA " + t.getLexema() + "\n";
-                } else {
-                    if (t.getClassificacao().equals("PONTO_VIRGULA")) {
-                        return;
-                    }
+                if (t.getClassificacao().equals("PONTO_VIRGULA")) {
+                    return;
                 }
             }
         }
@@ -172,15 +158,12 @@ public class AnalisadorSintatico {
                         new Simbolo(t, Simbolo.PROCEDURE));
                 this.escopoAtual = t.getLexema();
                 this.semantico.colocarEscopo(this.escopoAtual);
-
-                this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
             }
         }
 
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
             if (t.getClassificacao().equals("AP")) {
-                this.mensagem += "Lido AP" + "\n";
                 this.analiseParametrosFormais(lex);
             } else {
                 lex.rewindTokenCounter();
@@ -192,7 +175,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
                 this.erro(t, "PONTO_VIRGULA");
             } else {
-                this.mensagem += "Lido PONTO_VIRGULA" + "\n";
                 this.analiseBlocoSubrotina(lex);
             }
         }
@@ -202,8 +184,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("PONTO_VIRGULA")) {
                 this.erro(t, "PONTO_VIRGULA");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido PONTO_VIRGULA" + "\n";
             }
         }
     }
@@ -215,8 +195,6 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
             if (!t.getClassificacao().equals("palavra_begin")) {
                 this.erro(t, "palavra_begin");
-            } else {
-                this.mensagem += "Lido palavra_begin" + "\n";
             }
         }
 
@@ -230,8 +208,6 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
             if (!t.getClassificacao().equals("palavra_end")) {
                 this.erro(t, "palavra_end");
-            } else {
-                this.mensagem += "Lido palavra_end" + "\n";
             }
         }
     }
@@ -245,8 +221,6 @@ public class AnalisadorSintatico {
                 t = lex.getNextToken();
                 if (!t.getClassificacao().equals("palavra_var")) {
                     this.erro(t, "palavra_var");
-                } else {
-                    this.mensagem += "Lido palavra_var" + "\n";
                 }
             }
 
@@ -259,7 +233,6 @@ public class AnalisadorSintatico {
                     this.erro(t, "tipo_int/tipo_boolean");
                 } else {
                     this.semantico.classificaParametros(simbolos, escopoAtual, t.getClassificacao());
-                    this.mensagem += "Lido " + t.getClassificacao() + "\n";
                 }
             }
 
@@ -290,7 +263,6 @@ public class AnalisadorSintatico {
                     s = new Simbolo(t, Simbolo.PARAMETRO);
                     s.setOrdem(ordem++);
                     simbolos.add(s);
-                    this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
                 }
             }
 
@@ -313,7 +285,6 @@ public class AnalisadorSintatico {
 
         while (t.getClassificacao().equals("tipo_boolean")
                 || t.getClassificacao().equals("tipo_int")) {
-            this.mensagem += "Lido " + t.getClassificacao() + " " + t.getLexema() + "\n";
             this.analiseParteDeclaracoesVariaveis(lex, t.getClassificacao());
             t = lex.getNextToken();
         }
@@ -321,7 +292,6 @@ public class AnalisadorSintatico {
         if (!t.getClassificacao().equals("palavra_begin")) {
             this.erro(t, "palavra_begin");
         } else {
-            this.mensagem += "Lido palavra_begin" + "\n";
             lex.rewindTokenCounter();
             this.analiseComandoComposto(lex);
         }
@@ -336,7 +306,6 @@ public class AnalisadorSintatico {
 
         switch (t.getClassificacao()) {
             case "IDENTIFICADOR":
-                this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
                 if (this.semantico.verificaDeclaracao(this.escopoAtual, t)) {
                     this.semantico.usaSimbolo(this.escopoAtual, t);
                 }
@@ -344,7 +313,6 @@ public class AnalisadorSintatico {
                     aux = lex.getNextToken();
                     if (aux.getClassificacao().equals("OP_ATRI")) { // Atribuição
                         this.estaAtribuindo = true;
-                        this.mensagem += "Lido OP_ATRI" + "\n";
                         this.booleana = false;
                         this.analiseExpressao(lex);
                         this.semantico.verificaAtribuicao(this.escopoAtual, t, this.booleana);
@@ -360,16 +328,13 @@ public class AnalisadorSintatico {
 
             case "palavra_write":
             case "palavra_read":
-                this.mensagem += "Lido " + t.getClassificacao() + "\n";
                 if (lex.hasNextToken()) {
                     t = lex.getNextToken();
                     if (t.getClassificacao().equals("AP")) {
-                        this.mensagem += "Lido AP" + "\n";
                         this.analiseListaExpressoes(lex);
 
                         t = lex.getNextToken();
                         if (t.getClassificacao().equals("FP")) {
-                            this.mensagem += "Lido FP" + "\n";
                         } else {
                             this.erro(t, "FP");
                         }
@@ -422,8 +387,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("AP")) {
                 this.erro(t, "AP");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido AP" + "\n";
             }
         }
 
@@ -434,8 +397,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("FP")) {
                 this.erro(t, "FP");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido FP" + "\n";
             }
         }
 
@@ -444,8 +405,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("palavra_then")) {
                 this.erro(t, "palavra_then");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido palavra_then" + "\n";
             }
         }
 
@@ -457,7 +416,6 @@ public class AnalisadorSintatico {
         lex.rewindTokenCounter();
         t = lex.getNextToken();
         if (t.getClassificacao().equals("palavra_else")) {
-            this.mensagem += "Lido palavra_else" + "\n";
             do {
                 this.analiseComando(lex);
                 t = lex.getNextToken();
@@ -476,9 +434,7 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("palavra_while")) {
                 this.erro(t, "palavra_while");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido palavra_while" + "\n";
-            }
+            } 
         }
 
         if (lex.hasNextToken()) {
@@ -486,8 +442,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("AP")) {
                 this.erro(t, "AP");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido AP" + "\n";
             }
         }
 
@@ -498,8 +452,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("FP")) {
                 this.erro(t, "FP");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido FP" + "\n";
             }
         }
 
@@ -508,8 +460,6 @@ public class AnalisadorSintatico {
             if (!t.getClassificacao().equals("palavra_do")) {
                 this.erro(t, "palavra_do");
                 lex.rewindTokenCounter();
-            } else {
-                this.mensagem += "Lido palavra_do" + "\n";
             }
         }
 
@@ -535,14 +485,12 @@ public class AnalisadorSintatico {
                     this.semantico.usaSimbolo(this.escopoAtual, t);
                 }
                 this.escopoAux = t.getLexema();
-                this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
             }
         }
 
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
             if (t.getClassificacao().equals("AP")) {
-                this.mensagem += "Lido AP" + "\n";
                 this.semantico.getParametros(this.escopoAux);
                 this.analiseParametros = true;
                 this.booleana = false;
@@ -569,11 +517,6 @@ public class AnalisadorSintatico {
             t = lex.getNextToken();
             if (t.getClassificacao().equals("palavra_or") && (this.analiseParametros || this.estaAtribuindo)) {
                 this.booleana = true;
-            }
-            if (t.getClassificacao().equals("OPSOMA")
-                    || t.getClassificacao().equals("OPSUB")
-                    || t.getClassificacao().equals("palavra_or")) {
-                this.mensagem += "Lido " + t.getClassificacao() + "\n";
             }
         }
 
@@ -643,15 +586,12 @@ public class AnalisadorSintatico {
                             this.booleana = true;
                         }
                     }
-                    this.mensagem += "Lido IDENTIFICADOR " + t.getLexema() + "\n";
                     break;
 
                 case "NUM_INT":
-                    this.mensagem += "Lido NUM_INT " + t.getLexema() + "\n";
                     break;
 
                 case "NUM_REAL":
-                    this.mensagem += "Lido NUM_REAL " + t.getLexema() + "\n";
                     break;
 
                 case "AP":
@@ -659,7 +599,6 @@ public class AnalisadorSintatico {
                     break;
 
                 case "palavra_not":
-                    this.mensagem += "Lido palavra_not" + "\n";
                     if ((this.analiseParametros || this.estaAtribuindo)) {
                         this.booleana = true;
                     }
@@ -667,14 +606,12 @@ public class AnalisadorSintatico {
                     break;
 
                 case "palavra_true":
-                    this.mensagem += "Lido palavra_true" + "\n";
                     if ((this.analiseParametros || this.estaAtribuindo)) {
                         this.booleana = true;
                     }
                     break;
 
                 case "palavra_false":
-                    this.mensagem += "Lido palavra_false" + "\n";
                     if ((this.analiseParametros || this.estaAtribuindo)) {
                         this.booleana = true;
                     }
@@ -696,7 +633,6 @@ public class AnalisadorSintatico {
         if (lex.hasNextToken()) {
             t = lex.getNextToken();
             if (t.getClassificacao().equals("VIRGULA")) {
-                this.mensagem += "Lido VIRGULA" + "\n";
                 this.analiseListaExpressoes(lex);
             } else {
                 lex.rewindTokenCounter();
